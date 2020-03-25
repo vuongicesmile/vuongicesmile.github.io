@@ -1,0 +1,277 @@
+<!-- 
+
+ Để đẹp mắt em làm lab có sử dụng bootstrap3 theo hướng dẫn của anh Kim kênh Youtube"lập trình.io"
+Thiếu sót gì mong thầy bỏ qua cho, em cảm ơn ạ !!nhau
+install package -> Emmemt : go tat; chỉnh cấu hình máy về html
+
+
+-->
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Trang Web đầu tiên</title>
+	<!-- bs3-cdn :lấy bs3
+		Latest compiled and minified CSS & JS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+	<script src="//code.jquery.com/jquery.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+</head>
+<body>
+	<!--. la classs
+	# chỉ idea
+	+ để đặt hàng ngang 
+	bs3-navbar : tạo 1 navbar  -->
+	<nav class="navbar navbar-default" role="navigation">
+		<div class="container-fluid">
+			<!-- Brand and toggle get grouped for better mobile display -->
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="https://www.facebook.com/nguyenquocvuong1661999">vuongicesmile 🤣</a>
+			</div>
+	
+			<!-- Collect the nav links, forms, and other content for toggling -->
+			<div class="collapse navbar-collapse navbar-ex1-collapse">
+				<ul class="nav navbar-nav">
+					<li class="active"><a href="http://lazyfoo.net/SDL_tutorials/">Học tập ✍</a></li>
+					<li><a href="https://zingmp3.vn/">Âm nhạc</a></li>
+				</ul>
+				<form class="navbar-form navbar-left" role="search">
+					<div class="form-group">
+						<input type="text" class="form-control" placeholder="Search">
+					</div>
+					<button type="submit" class="btn btn-default" >Theo dõi</button>
+				</form>
+				<ul class="nav navbar-nav navbar-right">
+					<li><a href="https://www.lienminh.garena.vn/">Games</a></li>
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown">Xem thêm <b class="caret"></b></a>
+						<ul class="dropdown-menu">
+							<li><a href="#">Action</a></li>
+							<li><a href="#">Another action</a></li>
+							<li><a href="#">Something else here</a></li>
+							<li><a href="#">Separated link</a></li>
+						</ul>
+					</li>
+				</ul>
+			</div><!-- /.navbar-collapse -->
+		</div>
+	</nav>
+
+<div class="jumbotron">
+	<div class="container">
+		<h1>Xin chào đến với web của Vương</h1>
+		<p>Đây là trang web đầu tiên của tớ !!.. </p>
+		<p>
+			<a class="btn-primary btn-lg">Learn more</a>	
+		</p>
+	</div>
+</div>	
+<!--  Tạo 1 -->
+<div class="container">
+	<div class="row">
+		<div class="col-md-4">
+			<ul class="list-group">
+				<li class="list-group-item">
+					<span class="badge">5</span>
+					Học về HTML
+				</li>
+				<li class="list-group-item">
+					<span class="badge">10</span>
+					Học về CSS
+				</li>
+				<li class="list-group-item">
+					<span class="badge">15</span>
+					Học về JS
+				</li>
+			</ul>
+		</div>
+
+<!-- bs3-ju : tạo mẫu giới thiệu
+-->
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h4>Giới thiệu bản thân</h4>	
+			</div>
+			<div class="panel-body">
+				Họ và tên : Nguyễn Quốc Vương<br>
+				MSSV	  : 1813865<br>
+				Lớp       : CTK42<br>
+				Email.    : vuongnq.labianlabs@gmail.com
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+
+
+<h1>Lab 1: Hiểu về DNS</h1>
+            
+            <h3>1.DNS là viết tắ của các chữ nào?</h3>
+            <p>DNS(Domain name system): Hệ thống tên miền Hay hệ thống phân giải tên miền</p>
+            <h3>2.DNS dùng để làm gì ?</h3>
+            <p>DNS dùng để lưu trữ tên miền, chuyển đổi từ địa chỉ dạng chuỗi(tên miền), sang dạng số(IP) và ngược lại</p>
+            <h3>3.Truy cập 3 trang web mà không cần dùng tới tên miền</h6>
+             <div>
+                 <img style="width:500px" src="#" alt="Photo">
+                 <a href="https://taimienphi.vn/">taimienphi.vn</a>
+            </div>
+           
+            <div>
+                 <img style="width:500px" src="#" alt="Photo">
+                 <a href="https://tiki.vn/">tiki.vn</a>
+            </div>
+            <div>
+                 <img style="width:500px" src="#" alt="Photo">
+                 <a href="https://www.lazada.vn/">lazada.vn</a>
+            </div>
+            <br>
+            <h3>4. Tên miền cấp 1, Cấp 2, Cấp 3 là gì?Cho ví dụ</h3>
+            <p>Tên miền cấp một là tên miền quốc tế, được dùng chung cho nhiều quốc gia, Đại diện cho những lĩnh vực khác nhau vd: google.com, ebay.com, thenew.org...</p>
+            <p>Tên miền cấp hai là tên miền dành cho các quốc gia, mỗi quốc gia sẽ có tên miền riêng. VD: vietnamnet.vn, about.us ... </p>
+            <p> Tên miền cấp ba là sự kết hợp giữa tên miền cấp một và tên miền cấp hai. VD: dlu.edu.vn, google.com.vn </p>
+            <h3>5. Tên miền quốc tế là gì?</h3>
+            <p>Tên miền quốc tế: do Trung tâm quản lý tên miền quốc tế cấp. Vd:vietjetair.com, .jetstar.com, facebook.com </p>
+            <h3>Tên miền “nội địa” hay quốc gia là gì? cho 3 ví dụ?</h3>
+            <p>Tên miền quốc gia (nội địa): do Trung tâm quản lý tên miền của mỗi quốc gia quản lý. VD: dlu.edu.vn, ntt.edu.vn, hcmut.edu.vn  </p>
+            <h3>7.DNS server addresses trong cạc mạng máy tính dùng để làm gì? Tại sao lại có Preferred DNS server/Alternate DNS server?</h3>
+            <p>Để thiết lập địa chỉ của máy phân giải tên miền.Preferred DNS server và Alternate DNS server: Một  cái chính và một cái dự phòng.</p>
+            <h3>8.Trong card mạng, không điền thông tin trong DNS server, có truy cập được trang web không? chứng minh?</h3>
+            <p>– Card mạng sẽ tự động chuyển sang chế độ lấy DNS server address tự động. Nếu cố tình gán một DNS server address không tồn tại thì không thể truy cập trang web</p>
+            <h3>9.“8.8.8.8” là gì?</h3>
+            <p>Là DNS server address của Google</p>
+            <h3>10. Sau khi người dùng gõ vào trình duyệt https://www.w3schools.com/, gõ phím Enter.Viết lại quá trình một trình duyệt lấy trang web về?</h3>
+            <p>– Dựa vào thông tin DNS server address, gửi một gói tin để phân giải tên trang web sang IP. Gửi một gói tin yêu cầu nội dung trang web (index.html) tới Web server. Web server gửi nội dung trang web về cho máy client. Máy client thông dịch (biên dịch) mã nguồn của trang web (HTML, CSS, JavaScript) rồi hiển thị lên trình duyệt</p>
+            <h3>11.Thử cấu hình DNS server: sửa tập tin hosts để khi người dùng truy cập trang tuoitre.vn, nội dung trình duyệt sẽ hiển thị thông báo lỗi “không thể truy cập được trang tuoitre.vn”</h3>
+        </div>
+        <hr/>
+        <div>
+         <h1>Lab 2. Đăng ký tên miền miễn phí</h1>
+            <h3>1. Tại sao lại phải đăng ký tên miền?</h3>
+            <p>Xây dựng và bảo vệ thương hiệu <br/>
+                Xây dựng website để quản lý, dạy học, làm việc, làm thương mại, quảng cáo, quảng bá thương hiệu</p>
+            <h3>Đăng ký 3 tên miền miễn phí trên 3 hệ thống khác nhau?</h3>
+            <a href="http://www.tdg.dx.am/">awardspace.com/</a> 
+            <a href="https://thanhtdg.000webhostapp.com/">000webhostapp.com</a> >            
+            <a href="https://thanhtdg.epizy.com">infinityfree.net </a>
+
+        </div>
+        <hr/>
+        <h1>Lab 3. Đăng ký tên miền có phí</h1>
+            <h3>1. Tại sao nên đăng kí tên miền có phí?</h3>
+            <p>Tên miền có phí được hỗ trợ kĩ thuật. Tên miền miễn phí có thể mất bất cứ lúc nào</p>
+            <h3>2. Khảo sát bảng giá khi đăng kí tên miền có phí từ 6 nhà cung cấp dịch vụ (3 nhà cung cấp trong nước, 3 nhà cung cấp nước ngoài)? </h3>
+        <img style="width:500px" src="img/bkhs.jpg" alt="Photo">
+        <img style="width:500px" src="img/banggiapadvietnam.jpg" alt="Photo">
+        <img style="width:500px" src="img/matbao.jpg" alt="Photo">
+        <img style="width:500px" src="img/doman.jpg" alt="Photo">
+        <img style="width:500px" src="img/tenten.jpg" alt="Photo">
+        <img style="width:500px" src="img/tldlist.jpg" alt="Photo">
+        <hr/>
+        <h1>Lab 4. Hiểu về web server </h1>
+        <h3>Yêu cầu 1. Web server là gì (phần cứng, hệ điều hành, phần mềm Web Server, và nội dung của website)?</h3>
+        <p><b>Web sever:</b> là máy tính được kết nối với tập hợp mạng máy tính mở rộng. Máy chủ chứa toàn bộ dữ liệu mà nó được giao quyền quản lý. Mỗi máy chủ có một ip riêng và có thể đọc đa dạng ngôn ngữ như html,htm,file,.. máy chủ phải đảm bảo hoạt động liên tục để có thể cung cấp dữ liệu mạng lưới máy tính của nó.
+        </p>
+        <p><b>Phần cứng:</b> Máy chủ web là một máy tính lưu trữ các file ảnh, tài liệu HTML, CSS, file JavaScript của một website và chuyển chúng tới thiết bị của End-user. Máy chủ được kết nối internet và truy cập thông qua một tên miền</p>
+        <p><b>Phần mềm:</b> Phần mềm được cài đặt trên máy chủ web server (phần cứng) để xử lý các truy cập HTTP gửi tới máy chủ cũng thường được với cung fmotoj thuật ngữ là web server nhưng hiểu theo khía cạnh là một phần mềm. Vd: Apache,Unicorn,Nginx...  </p>
+        <p><b>Hệ điều hành:</b>Unix, Linux, Windows, Mac OS X, FreeBSD,…</p>
+        <h3>Yêu cầu 2. Phân tích một URL chuẩn, ý nghĩa của mỗi thành phần, cho ví dụ?</h3>
+        <p><b>1. URL là gì?(Uniform Resource Locator)</b>URL đơn giản là một đường dẫn liên kết đến website, tham chiếu tới các tài nguyên trên internet. Để sử dụng các tài nguyên này cần có những đường dẫn chính xác và URL đảm nhận công việc này. </p>
+        <p><b>2, Mục đích sử dụng của URL:</b>URL dùng để định vị địa chỉ site trên Internet, có thể là địa chỉ của một website, một webpage, một wap, wappage hoặc một bài đăng cụ thể nào đó trên Website. </p>
+        <p><b>3. Thành phần cấu trúc của URl</b></p>
+        <i>1.Hypertext Transfer Protocol:</i> URL scheme hay còn được gọi là tên của giao thức ( http://, https://, ftp://). Ngoài ra, nó còn có các tên khác như New, Mailto, … giao thức ứng dụng phổ biến nhất được sử dụng trên các trang web trên toàn thế giới.
+        <br/>
+        <i>2.Tên miền của trang web.</i>
+        <br/>
+        <i>3.Thư mục con của tập tin.</i>
+        <br/>
+        <i>4.Tên tập tin của tài nguyên yêu cầu.</i>
+        <br/>
+        Có ba yếu tố của một URL mà chúng ta có thể tùy chỉnh: tên miền, các thư mục con và các tên tập tin
+        <br/>
+        <img src="img/thanhphanurl.jpg" alt="photo">
+        <hr/>
+        <h1>Lab 5. Tự dựng một web server</h1>
+        <h3>Yêu cầu 1 Điền các thông tin cơ bản web server sẽ dựng?</h3>
+        Thông tin phần cứng (CPU, đĩa cứng, RAM): r3 1200, ssd, 12gb.
+        <br/>
+        hệ diều hành: windown;
+        <br/>
+        phàn mềm web server: XAMPP
+        <h3>Yêu cầu 3. Phân biệt các khái niệm sau:</h3>
+        <b>Webpage: </b>Một Web Page (trang web) có thể là 1 bài viết, 1 chuyên mục hoặc 1 trang thông tin bất kỳ.
+        <br/>
+        <b>website: là trang web, là một tập hợp các trang web con, bao gồm văn bản, hình ảnh, video, flash v.v..</b>
+        <br/>
+        <b>Web application:</b>Ứng dụng web là chương trình máy tính sử dụng trình duyệt web và công nghệ web để thực hiện các tác vụ qua Internet.
+        <img src="img/sswsitevsapp.jpg" alt="photo">
+        <b>static website:</b> Web tĩnh tức là website cố định về nội dung, không có hoặc hạn chế về sự tương tác với website, chủ yếu sử dụng bằng mã nguồn HTML, JavaScript hoặc Flash. Nội dung cố định sau khi được thiết kế. Thường không có trang quản trị để thay đổi nội dung, cập nhật bài viết. Không có sự tương tác ngược từ người xem vào nội dung trang.
+        <br/>
+        <b>dynamic website:</b> Sử dụng mã nguồn PHP (chạy trên host Linux - cơ sở dữ liệu MySQL) hoặc ASP (chạy trên host windows - Cơ sở dữ liệu MSQL), thường có trang quản trị, để thay đổi, cập nhật nội dung trên site. Sử dụng cơ sở dữ liệu để quản lý các hạng mục trên website (bài viết, thành viên, các menu...). Người dùng có thể tương tác dễ dàng đến nội dung site.
+        <br>
+        <b>static webpage: </b>giống với static website nhưng là tập con
+        <b>dynamic webpage: </b>giống với dynamic website nhưng là tập con
+        <b>Yêu cầu 4. Cấu hình tên miền ảo (virtual host), thực hiện cấu hình trên tập tin httpd-vhosts.conf, để có thể mở website với URL kiểu như thế này: http://example.local</b> 
+        <hr/>
+        <h1>Lab 6. Tìm hiểu về các loại hosting sau? Ưu và nhược điểm của mỗi loại?</h1>
+        <b>Shared Hosting</b>
+        Dịch vụ lưu trữ web, nơi chứa đồng thời nhiều trang web trên một máy chủ web được kết nối Internet.
+        <br/>
+        <b>VPS Hosting</b>
+        Được tạo thành bằng phương pháp sử dụng công nghệ ảo hóa để chia tách từ một máy chủ riêng vật lý thành nhiều máy chủ ảo khác nhau.
+        <br/>
+        <b>Cloud Hosting</b>
+        Cloud Hosting cũng sử dụng các control panel quản lý Hosting như DirectAdmin, cũng cấu hình và thiết lập tính năng như Web Hosting tuy nhiên có 1 điểm khác biệt duy nhất giữa Cloud Hosting so với Web Hosting là Cloud Hosting chạy trên các máy chủ Cloud.
+        <br/>
+        <b>WordPress Hosting: </b>là dịch vụ lưu trữ chuyên dụng được tối ưu hóa dành riêng cho mã nguồn WordPress. Phù hợp với các khách hàng sử dụng để xây dựng các website bán hàng, giới thiệu công ty, tin tức, thương mại điện tử… 
+        <b>Dedicated hosting</b> (máy chủ dùng riêng): Dạng hosting này khách hàng sẽ thuê máy chủ của nhà cung cấp dịch vụ. Sau khi cài đặt hoàn tất theo yêu cầu trong hợp đồng, nhà cung cấp sẽ gửi cho khách hàng thông tin đăng nhập cho khách hàng để khách hàng có thể dùng chức năng quản trị từ xa kết nối vào máy chủ và làm những gì họ thích. Đây là loại hosting có giá thành đắt nhất trong các loại (còn tuỳ thuộc vào cấu hình máy chủ)
+        <hr/>
+        <h1>Lab 7. Tìm hiểu các thông số liên quan đến một web hosting?</h1>
+        <h3>Dung lượng lưu trữ (disk space)</h3>
+        Bất kỳ gói Hosting nào cũng có thông số này, đây là thuật ngữ chỉ sức chứa của Hosting, tương tự như dung lượng của ổ cứng trên máy tính hoặc USB của bạn vậy
+        <h3>Băng thông (bandwidth)</h3>
+         Băng thông là tổng lưu lượng Up/Down File của Hosting.
+        <h3> Cơ chế bảo mật, sao lưu và phục hồi dữ liệu</h3>
+        có thể hiểu là hành động sao chép / sao lưu lại toàn bộ nội dung và các dữ liệu gốc quan trọng của một website phòng khi website gặp sự cố hay khi cần chuyển qua website khác.
+        <h3>Phần mềm hỗ trợ thao tác với web hosting (upload/download)</h3>
+        <h3>Khả năng tương thích với các: CMS, framework, ngôn ngữ lập trình (loại ngôn ngữ, phiên bản)</h3>
+        <hr/>
+        <h1>Lab 8. Shared hosting miễn phí</h1>
+        <img style="width:500px" src="img/hostfree1.jpg">
+        <hr/>
+        <h1>Lab 9. Shared hosting có phí</h1>
+
+
+<footer>
+	<!-- unicode character table: Web lấy kí tự đặc biệt-->
+	<p class="text-center">copyright &#169 2020 vuongicesmile </p>
+</footer>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
