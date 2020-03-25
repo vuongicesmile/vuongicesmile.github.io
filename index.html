@@ -1,0 +1,171 @@
+<!-- 
+
+ Để đẹp mắt em làm lab có sử dụng bootstrap3 theo hướng dẫn của anh Kim kênh Youtube"lập trình.io"
+Thiếu sót gì mong thầy bỏ qua cho, em cảm ơn ạ !!nhau
+install package -> Emmemt : go tat; chỉnh cấu hình máy về html
+
+
+-->
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Trang Web đầu tiên</title>
+	<!-- bs3-cdn :lấy bs3
+		Latest compiled and minified CSS & JS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+	<script src="//code.jquery.com/jquery.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+</head>
+<body>
+	<!--. la classs
+	# chỉ idea
+	+ để đặt hàng ngang 
+	bs3-navbar : tạo 1 navbar  -->
+	<nav class="navbar navbar-default" role="navigation">
+		<div class="container-fluid">
+			<!-- Brand and toggle get grouped for better mobile display -->
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="https://www.facebook.com/nguyenquocvuong1661999">vuongicesmile 🤣</a>
+			</div>
+	
+			<!-- Collect the nav links, forms, and other content for toggling -->
+			<div class="collapse navbar-collapse navbar-ex1-collapse">
+				<ul class="nav navbar-nav">
+					<li class="active"><a href="http://lazyfoo.net/SDL_tutorials/">Học tập ✍</a></li>
+					<li><a href="https://zingmp3.vn/">Âm nhạc</a></li>
+				</ul>
+				<form class="navbar-form navbar-left" role="search">
+					<div class="form-group">
+						<input type="text" class="form-control" placeholder="Search">
+					</div>
+					<button type="submit" class="btn btn-default" >Theo dõi</button>
+				</form>
+				<ul class="nav navbar-nav navbar-right">
+					<li><a href="https://www.lienminh.garena.vn/">Games</a></li>
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown">Xem thêm <b class="caret"></b></a>
+						<ul class="dropdown-menu">
+							<li><a href="#">Action</a></li>
+							<li><a href="#">Another action</a></li>
+							<li><a href="#">Something else here</a></li>
+							<li><a href="#">Separated link</a></li>
+						</ul>
+					</li>
+				</ul>
+			</div><!-- /.navbar-collapse -->
+		</div>
+	</nav>
+
+<div class="jumbotron">
+	<div class="container">
+		<h1>Xin chào đến với web của Vương</h1>
+		<p>Đây là trang web đầu tiên của tớ !!.. </p>
+		<p>
+			<a class="btn-primary btn-lg">Learn more</a>	
+		</p>
+	</div>
+</div>	
+<!--  Tạo 1 -->
+<div class="container">
+	<div class="row">
+		<div class="col-md-4">
+			<ul class="list-group">
+				<li class="list-group-item">
+					<span class="badge">5</span>
+					Học về HTML
+					<ol>
+		<li>
+<a href="">Exercise 4-1. Entering content (p53)</a><br>
+<a href="">Exercise 4-2. Adding basic structure (p57)</a><br>
+<a href="">Exercise 4-3. Defining text elements (p59)</a><br>
+<a href="">Exercise 4-4. Adding an image (p63)</a><br>
+<a href="">Exercise 4-5. Adding a style sheet (p65)</a><br>
+<a href="">Exercise 5-1. Marking up a recipe (p79)</a><br>
+<a href="">Exercise 5-2. Identifying inline elements (p94)</a><br>
+<a href="">Exercise 5-3. The Black Goose Blog page (p101)</a><br>
+<a href="">Exercise 6-1. Make an external link (p107)</a><br>
+<a href="">Exercise 6-2. Link in the same directory (p109)</a><br>
+<a href="">Exercise 6-3. Link one directory down (p110)</a><br>
+<a href="">Exercise 6-4. Link two directory down (p111)</a><br>
+<a href="">Exercise 6-5. Link to a higher directory (p112)</a><br>
+<a href="">Exercise 6-6. Link up two directory levels (p113)</a><br>
+<a href="">Exercise 6-7. Try a few more (p115)</a><br>
+<a href="">Exercise 6-8. Link to a fragment (p118)</a><br>
+<a href="">Exercise 7-1. Adding and linking images (p129)</a><br>
+<a href="">Exercise 8-1. Making a simple table (p139)</a><br>
+<a href="">Exercise 8-2. Column spans (p140)</a><br>
+<a href="">Exercise 8-3. Row spans (p141)</a><br>
+<a href="">Exercise 8-4. The table challenge (p145)</a><br>
+<a href="">Exercise 9-1. Starting the contest form (p159)</a><br>
+<a href="">Exercise 9-2. Adding radio buttons and checkboxes (p162)</a><br>
+<a href="">Exercise 9-3. Adding a menu (p165)</a><br>
+<a href="">Exercise 9-4. Labels and fieldsets (p173)</a><br>
+
+		</li>
+	</ol>
+				</li>
+				<li class="list-group-item">
+					<span class="badge">10</span>
+					Học về CSS
+				</li>
+				<li class="list-group-item">
+					<span class="badge">15</span>
+					Học về JS
+				</li>
+			</ul>
+		</div>
+
+<!-- bs3-ju : tạo mẫu giới thiệu
+-->
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h4>Giới thiệu bản thân</h4>	
+			</div>
+			<div class="panel-body">
+				Họ và tên : Nguyễn Quốc Vương<br>
+				MSSV	  : 1813865<br>
+				Lớp       : CTK42<br>
+				Email.    : vuongnq.labianlabs@gmail.com
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+
+
+
+<footer>
+	<!-- unicode character table: Web lấy kí tự đặc biệt-->
+	<p class="text-center">copyright &#169 2020 vuongicesmile </p>
+</footer>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
