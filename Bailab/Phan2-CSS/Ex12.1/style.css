@@ -1,0 +1,47 @@
+body 
+{
+	font-family: Verdana, sans-serif;
+	font-size:small;
+	
+line-height: 1,75em;
+ }
+h1 {font-family: "Marko One", Georgia,
+serif;
+font-size: 100%}
+.vuongpro
+{
+	text-indent: -5em;
+}
+p,dl 
+{
+font-size : .875em;}
+
+strong { font-style: italic; color: maroon; }
+
+.price {
+font-family: Georgia, serif;
+font-style: italic;
+color: gray;
+}
+.label {
+font-weight: bold;
+font-variant: small-caps;
+font-style: normal;
+}
+p.warning, sup {
+font-size: x-small;
+color: red;
+}
+#info p {
+font-style: italic;
+color: gray;}
+h1, h2, #info {
+text-align: center;}
+h2 {
+font-size: 1em;
+text-transform: uppercase;
+letter-spacing: .5em;
+color: purple;}
+h2 + p {
+text-align: center;
+font-style: italic;}
