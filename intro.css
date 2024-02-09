@@ -1812,7 +1812,7 @@ body{
     margin-top: -50px;
 }
 .slider3:hover .content h3{
-    animation: fixedContent 2s 2s forwards;
+    animation: fixedContent 0.1s 0.1s forwards;
 }
 @keyframes fixedContent{
     0%{
