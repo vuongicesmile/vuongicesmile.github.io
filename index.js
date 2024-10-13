@@ -1,4 +1,4 @@
-const contentLetterSrart_actived = "chúc mí người sinh nhật dzuii dzẻ ; dạo này thấy bận bận im ắng hẳnn; hi vọng năm ngoái khó khăn với chúng ta thì năm nay sẽ có nhiều điều tốt lành hơn heee; chúc Blue của tui mãi xanh tươi như bầu trời , thiệt là hạnh phúc mỗi ngày nhennn . Fightingg." //Lời mở đầu cho bức thư
+const contentLetterSrart_actived = "Cô giáo nghé Mỹ Trưng mau mau khoẻ bệnh nhaaaaa. Fightingg." //Lời mở đầu cho bức thư
 const mainContentLetter = "Love you 3000." //Nội dung của bức thư
 
 // Gắn 1 đường link ảnh bất kì
