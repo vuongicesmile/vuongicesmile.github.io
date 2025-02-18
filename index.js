@@ -1,4 +1,4 @@
-const contentLetterSrart_actived = "Cô giáo nghé Mỹ Trưng mau mau khoẻ bệnh nhaaaaa. Fightingg." //Lời mở đầu cho bức thư
+const contentLetterSrart_actived = "Chúc chị Loan sinh nhật dzui dẻ, sớm có một đội bóng, mau giàu để bao nuôi em !!" //Lời mở đầu cho bức thư
 const mainContentLetter = "Love you 3000." //Nội dung của bức thư
 
 // Gắn 1 đường link ảnh bất kì
