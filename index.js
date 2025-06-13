@@ -1,9 +1,14 @@
 const contentLetterSrart_actived = `HAPPY BIRTHDAY EM 🎂🥳
-Chúc em yêu của anh tuổi mới luôn vui vẻ 😊, lạc quan và yêu đời 😍😎✨. Mong em luôn đạt được những điều em mơ ước, mong muốn 💕💖🌟.
-Chúc em sớm đạt được những dự định trong tương lai 🚀🎯. Và anh mong trong khoảng thời gian đó anh sẽ luôn đồng hành cùng em 👫💕.
-Mong cho tuổi mới em sẽ yêu anh nhiều hơn 🥰, yêu anh lâu hơn nha 😘💞. Anh biết mỗi ngày em sẽ phải rất mệt mỏi 😢💤.
-Nhưng em đừng chịu đựng một mình nhé 🙉🙈🙊. Anh vẫn sẽ luôn lắng nghe 👂 và trò chuyện cùng em 💬🫂.
-Anh yêu em nhiều lắm aa 😋❤️‍🔥. Chúc em có 1 ngày sinh nhật thật vui vẻ nha 🎉🎈🥰🙈🙊.`;
+Chúc em yêu của anh tuổi mới luôn vui vẻ 😊, lạc quan và yêu đời 😍😎✨. 
+Mong em luôn đạt được những điều em mơ ước, mong muốn 💕💖🌟.
+Chúc em sớm đạt được những dự định trong tương lai 🚀🎯. 
+Và anh mong trong khoảng thời gian đó anh sẽ luôn đồng hành cùng em 👫💕.
+Mong cho tuổi mới em sẽ yêu anh nhiều hơn 🥰, yêu anh lâu hơn nha 😘💞. 
+Anh biết mỗi ngày em sẽ phải rất mệt mỏi 😢💤.
+Nhưng em đừng chịu đựng một mình nhé 🙉🙈🙊. 
+Anh vẫn sẽ luôn lắng nghe 👂 và trò chuyện cùng em 💬🫂.
+Anh yêu em nhiều lắm aa 😋❤️‍🔥. 
+Chúc em có 1 ngày sinh nhật thật vui vẻ nha 🎉🎈🥰🙈🙊.`;
 
 // Gắn 1 đường link ảnh bất kì
 let imgStart = document.querySelector(".myAI"); //Hình ảnh xuất hiện trong lời mở đầu của bức thư
