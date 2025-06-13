@@ -26,7 +26,7 @@ document.querySelector(".sticker").addEventListener("click", function () { //Hiá
     setTimeout(() => {
         splitContentLetterSrart_actived.forEach((val, index) => {
             setTimeout(() => {
-                document.querySelector(".contentLetter").innerHTML += val;
+                document.querySelector(".contentLetter").innerHTML += val === '\n' ? '<br>' : val;
                 if (index == contentLetterSrart_actived.length - 1) {
                     setTimeout(() => {
                         document.querySelector(".recieve").setAttribute("style", "opacity: 1; transition: .5s") 
