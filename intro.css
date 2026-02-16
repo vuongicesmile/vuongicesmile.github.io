@@ -1802,7 +1802,7 @@ body{
 .content .fixedContent{
     width: 250px;
     height: 80px;
-    overflow: hidden; 
+    overflow: scroll; 
     margin-left: 150px;  
 }
 .box-content .right .content h3{
