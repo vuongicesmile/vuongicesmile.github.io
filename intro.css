@@ -1787,6 +1787,7 @@ body{
     font-family: 'Dancing Script', cursive;
     opacity: 0;
     transition: 1s;
+    overflow-y: auto;
 }
 .slider3:hover .content p{
     animation: bodyContent 2s 1s forwards;
