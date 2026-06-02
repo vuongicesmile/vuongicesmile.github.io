@@ -2841,7 +2841,7 @@ if settings.DEBUG:
 | \`.env\` | \`.env\` |
 | Không validate kiểu | ✅ Pydantic validate |
 | Đọc lại mỗi lần gọi | ✅ Cached singleton |
-`},{id:`database-setup`,unit:5,title:`Database Setup — SQLAlchemy vs Eloquent ORM`,subtitle:`Engine, SessionLocal, Base — Data Mapper Pattern vs Active Record`,tags:[`sqlalchemy`,`eloquent`,`orm`,`patterns`,`laravel`],readTime:8,keyTakeaway:`SQLAlchemy Session = Unit of Work. Mọi thay đổi track trong session, commit 1 lần. Khác với Eloquent save() từng record.`,content:`# Bài 5 — Database Setup: SQLAlchemy vs Eloquent
+`},{id:`database-setup`,unit:5,title:`Database Setup — SQLAlchemy vs Eloquent ORM`,subtitle:`Engine, SessionLocal, Base — Data Mapper Pattern vs Active Record`,tags:[`sqlalchemy`,`eloquent`,`orm`,`patterns`,`laravel`],readTime:8,keyTakeaway:`SQLAlchemy Session = Unit of Work. Mọi thay đổi track trong session, commit 1 lần.`,content:`# Bài 5 — Database Setup: SQLAlchemy vs Eloquent
 
 ## Pattern khác nhau căn bản
 
@@ -3010,7 +3010,7 @@ def create_author_with_books(db: Session, author_data, books_data):
 \`\`\`
 
 > **💡 So với Laravel:** \`DB::transaction()\` cũng làm được điều này, nhưng phải wrap thủ công. SQLAlchemy Session mặc định đã là transaction — mọi thứ tự động atomic cho đến khi \`commit()\`.
-`},{id:`sqlalchemy-models`,unit:6,title:`SQLAlchemy Models — Database Tables & Relationships`,subtitle:`Column types, ForeignKey, relationship() — so sánh với Eloquent`,tags:[`models`,`sqlalchemy`,`eloquent`,`relationships`,`orm`],readTime:9,keyTakeaway:`relationship() = Eloquent hasMany/belongsTo. back_populates tương đương khai báo 2 chiều trong cả 2 models.`,content:`# Bài 6 — SQLAlchemy Models: Database Tables & Relationships
+`},{id:`sqlalchemy-models`,unit:6,title:`SQLAlchemy Models — Database Tables & Relationships`,subtitle:`Column types, ForeignKey, relationship() — so sánh với Eloquent`,tags:[`models`,`sqlalchemy`,`eloquent`,`relationships`,`orm`],readTime:9,keyTakeaway:`relationship() = Eloquent hasMany/belongsTo. back_populates tương đương khai báo 2 chiều.`,content:`# Bài 6 — SQLAlchemy Models: Database Tables & Relationships
 
 ## models/author.py
 
@@ -3316,60 +3316,2370 @@ alembic downgrade base   # ⚠️ Rollback TẤT CẢ = artisan migrate:reset
 \`\`\`
 
 > **⚠️ \`downgrade base\` rất nguy hiểm!** Nó DROP tất cả tables. Chỉ dùng khi dev, không bao giờ trên production. Tương đương \`php artisan migrate:reset\`.
-`},{id:`pydantic-schemas`,unit:8,title:`Pydantic Schemas — Form Requests + API Resources`,subtitle:`4 schema pattern, validation tự động — Laravel Request + Resource trong 1`,tags:[`pydantic`,`schemas`,`validation`,`laravel`,`api-resources`],readTime:8,keyTakeaway:`1 resource = 4 schemas: Base, Create, Update, Response. Pydantic tự validate và raise 422 nếu sai.`,content:`# Bài 8 — Nội dung đang được viết
+`},{id:`pydantic-schemas`,unit:8,title:`Pydantic Schemas — Form Requests + API Resources`,subtitle:`4 schema pattern, validation tự động — Laravel Request + Resource trong 1`,tags:[`pydantic`,`schemas`,`validation`,`laravel`,`api-resources`],readTime:8,keyTakeaway:`1 resource = 4 schemas: Base, Create, Update, Response. Pydantic tự validate và raise 422 nếu sai.`,content:`# Bài 8 — Pydantic Schemas: Form Requests + API Resources
 
-> Bài này sẽ có nội dung đầy đủ sớm. Hãy đọc các bài 1-7 trước!
+## Tại sao cần nhiều schemas?
 
-## Sắp có:
-- Giải thích chi tiết với ví dụ thực tế
-- So sánh với Laravel 11
-- Code samples có thể copy ngay
-`},{id:`repository-pattern`,unit:9,title:`Repository Pattern — Tách Data Access Layer`,subtitle:`Design pattern quan trọng nhất — so sánh Laravel Repository vs FastAPI`,tags:[`repository`,`design-pattern`,`solid`,`clean-code`,`laravel`],readTime:10,keyTakeaway:`Repository = lớp trung gian giữa business logic và database. Controller không được biết db.query() là gì.`,content:`# Bài 9 — Nội dung đang được viết
+Cùng 1 resource (Book) nhưng:
 
-> Bài này sẽ có nội dung đầy đủ sớm. Hãy đọc các bài 1-7 trước!
+| Endpoint | Cần gì | Schema |
+|---|---|---|
+| \`POST /books\` | nhận \`title\`, \`author_id\`... (không có \`id\`) | \`BookCreate\` |
+| \`PATCH /books/1\` | nhận bất kỳ field nào, tất cả optional | \`BookUpdate\` |
+| \`GET /books/1\` | trả về \`id\`, \`title\`, \`author\` object... | \`BookResponse\` |
 
-## Sắp có:
-- Giải thích chi tiết với ví dụ thực tế
-- So sánh với Laravel 11
-- Code samples có thể copy ngay
-`},{id:`service-layer`,unit:10,title:`Service Layer Pattern — Business Logic`,subtitle:`Tách business logic khỏi endpoint — 3 tầng rõ ràng`,tags:[`service`,`design-pattern`,`business-logic`,`solid`,`laravel`],readTime:9,keyTakeaway:`Endpoint = thin route handler. Service = business logic. Repository = data access. 3 tầng rõ ràng.`,content:`# Bài 10 — Nội dung đang được viết
+→ Cần 3-4 schemas khác nhau cho cùng 1 resource.
 
-> Bài này sẽ có nội dung đầy đủ sớm. Hãy đọc các bài 1-7 trước!
+---
 
-## Sắp có:
-- Giải thích chi tiết với ví dụ thực tế
-- So sánh với Laravel 11
-- Code samples có thể copy ngay
-`},{id:`crud-complete`,unit:11,title:`Full CRUD — Apply 3 Layers thực tế`,subtitle:`Categories, Authors, Books với Repository + Service + Endpoint`,tags:[`crud`,`categories`,`authors`,`books`,`full-stack`],readTime:9,keyTakeaway:`exclude_unset=True là key cho PATCH — chỉ update fields được gửi lên, không null hóa fields còn lại.`,content:`# Bài 11 — Nội dung đang được viết
+## Laravel vs FastAPI: Validation + Serialization
 
-> Bài này sẽ có nội dung đầy đủ sớm. Hãy đọc các bài 1-7 trước!
+### Laravel — 2 file riêng
 
-## Sắp có:
-- Giải thích chi tiết với ví dụ thực tế
-- So sánh với Laravel 11
-- Code samples có thể copy ngay
-`},{id:`testing`,unit:12,title:`Testing — pytest vs PHPUnit/Pest`,subtitle:`TestClient, fixtures, test database, TDD`,tags:[`testing`,`pytest`,`phpunit`,`laravel`,`tdd`],readTime:9,keyTakeaway:`pytest fixtures = Laravel setUp(). TestClient = Pest get()/post(). Transaction rollback = RefreshDatabase.`,content:`# Bài 12 — Nội dung đang được viết
+\`\`\`php
+// FormRequest — VALIDATION (incoming data)
+class StoreCategoryRequest extends FormRequest {
+    public function rules(): array {
+        return [
+            'name'        => 'required|string|max:100|unique:categories',
+            'description' => 'nullable|string',
+        ];
+    }
+}
 
-> Bài này sẽ có nội dung đầy đủ sớm. Hãy đọc các bài 1-7 trước!
+// API Resource — SERIALIZATION (outgoing data)
+class CategoryResource extends JsonResource {
+    public function toArray($request): array {
+        return [
+            'id'          => $this->id,
+            'name'        => $this->name,
+            'description' => $this->description,
+        ];
+    }
+}
+\`\`\`
 
-## Sắp có:
-- Giải thích chi tiết với ví dụ thực tế
-- So sánh với Laravel 11
-- Code samples có thể copy ngay
-`},{id:`error-handling`,unit:13,title:`Error Handling — Custom Exception Handler`,subtitle:`HTTPException, global handler, consistent error format`,tags:[`errors`,`exceptions`,`handler`,`laravel`,`api`],readTime:6,keyTakeaway:`Consistent error format quan trọng cho FE. Global exception handler để standardize tất cả errors.`,content:`# Bài 13 — Nội dung đang được viết
+### FastAPI — 1 file, nhiều classes
 
-> Bài này sẽ có nội dung đầy đủ sớm. Hãy đọc các bài 1-7 trước!
+\`\`\`python
+# app/schemas/category.py
+from pydantic import BaseModel, field_validator
 
-## Sắp có:
-- Giải thích chi tiết với ví dụ thực tế
-- So sánh với Laravel 11
-- Code samples có thể copy ngay
-`},{id:`deployment`,unit:14,title:`Deploy Production — PostgreSQL, Docker, Checklist`,subtitle:`Switch SQLite sang PostgreSQL. Docker. CORS. Tổng kết toàn bộ.`,tags:[`deployment`,`postgresql`,`docker`,`nginx`,`laravel`],readTime:8,keyTakeaway:`DATABASE_URL là cách duy nhất switch environment. Code không đổi một chữ.`,content:`# Bài 14 — Nội dung đang được viết
+# BASE — Các fields dùng chung (như abstract FormRequest)
+class CategoryBase(BaseModel):
+    name: str
+    description: str | None = None
 
-> Bài này sẽ có nội dung đầy đủ sớm. Hãy đọc các bài 1-7 trước!
+# CREATE — POST request (= StoreCategoryRequest)
+class CategoryCreate(CategoryBase):
+    pass  # Kế thừa name + description từ Base
 
-## Sắp có:
-- Giải thích chi tiết với ví dụ thực tế
-- So sánh với Laravel 11
-- Code samples có thể copy ngay
+# UPDATE — PATCH request (tất cả optional)
+class CategoryUpdate(BaseModel):
+    name: str | None = None
+    description: str | None = None
+
+# RESPONSE — API Resource (= CategoryResource)
+class CategoryResponse(CategoryBase):
+    id: int
+
+    model_config = {"from_attributes": True}
+    # Pydantic v2: from_attributes = True
+    # Pydantic v1: class Config: orm_mode = True
+    # Cho phép đọc từ SQLAlchemy object (không chỉ dict)
+\`\`\`
+
+---
+
+## Schemas đầy đủ cho Author
+
+\`\`\`python
+# app/schemas/author.py
+from pydantic import BaseModel, field_validator
+
+class AuthorBase(BaseModel):
+    name: str
+    bio: str | None = None
+
+    @field_validator('name')
+    @classmethod
+    def name_must_not_be_empty(cls, v: str) -> str:
+        if not v.strip():
+            raise ValueError('Tên tác giả không được để trống')
+        return v.strip()  # Auto-trim whitespace
+
+class AuthorCreate(AuthorBase):
+    pass
+
+class AuthorUpdate(BaseModel):
+    name: str | None = None
+    bio: str | None = None
+
+class AuthorResponse(AuthorBase):
+    id: int
+    model_config = {"from_attributes": True}
+\`\`\`
+
+---
+
+## Schemas cho Book — Nested Response
+
+\`\`\`python
+# app/schemas/book.py
+from pydantic import BaseModel, field_validator
+from datetime import datetime
+from app.schemas.author import AuthorResponse
+from app.schemas.category import CategoryResponse
+
+class BookBase(BaseModel):
+    title: str
+    description: str | None = None
+    published_year: int | None = None
+    author_id: int
+    category_id: int
+
+    @field_validator('published_year')
+    @classmethod
+    def year_must_be_valid(cls, v: int | None) -> int | None:
+        if v is not None and (v < 1000 or v > 2100):
+            raise ValueError('Năm xuất bản phải từ 1000 đến 2100')
+        return v
+
+    @field_validator('title')
+    @classmethod
+    def title_must_not_be_empty(cls, v: str) -> str:
+        if not v.strip():
+            raise ValueError('Tiêu đề không được để trống')
+        return v.strip()
+
+class BookCreate(BookBase):
+    pass
+
+class BookUpdate(BaseModel):
+    title: str | None = None
+    description: str | None = None
+    published_year: int | None = None
+    author_id: int | None = None
+    category_id: int | None = None
+
+class BookResponse(BookBase):
+    id: int
+    cover_image: str | None = None
+    created_at: datetime
+    updated_at: datetime | None = None
+
+    # Nested objects — tương đương Resource::collection()
+    # Trả về full author object, không chỉ author_id
+    author: AuthorResponse
+    category: CategoryResponse
+
+    model_config = {"from_attributes": True}
+\`\`\`
+
+---
+
+## from_attributes — Tại sao quan trọng?
+
+\`\`\`python
+# Không có from_attributes=True:
+db_book = db.query(Book).first()   # SQLAlchemy object
+BookResponse(db_book)               # ❌ Pydantic không đọc được!
+
+# Có from_attributes=True:
+BookResponse.model_validate(db_book)  # ✅ Đọc attributes của object
+
+# FastAPI tự làm khi dùng response_model:
+@router.get("/{id}", response_model=BookResponse)
+def get_book(id: int, db: Session = Depends(get_db)):
+    book = db.query(Book).filter(Book.id == id).first()
+    return book  # FastAPI tự gọi BookResponse.model_validate(book)
+\`\`\`
+
+---
+
+## Pydantic validation tự động
+
+\`\`\`python
+# Client gửi sai data:
+# POST /books
+# Body: {"description": "no title field"}
+
+# FastAPI tự trả về 422 — không cần viết code validation:
+# {
+#   "detail": [
+#     {
+#       "loc": ["body", "title"],
+#       "msg": "Field required",
+#       "type": "missing"
+#     }
+#   ]
+# }
+
+# Client gửi sai kiểu:
+# Body: {"title": "Python", "author_id": "abc", "category_id": 1}
+# Response 422:
+# {
+#   "detail": [
+#     {
+#       "loc": ["body", "author_id"],
+#       "msg": "Input should be a valid integer",
+#       "type": "int_parsing"
+#     }
+#   ]
+# }
+\`\`\`
+
+---
+
+## Dùng trong endpoint — Full example
+
+\`\`\`python
+@router.post(
+    "/",
+    response_model=BookResponse,   # Pydantic serialize output
+    status_code=201,
+    summary="Tạo sách mới",
+    description="Tạo sách mới với author và category đã tồn tại.",
+)
+def create_book(
+    book_in: BookCreate,           # Pydantic validate input
+    db: Session = Depends(get_db),
+):
+    # book_in.title: str (guaranteed, đã trim)
+    # book_in.author_id: int (guaranteed)
+    # book_in.published_year: int | None (guaranteed, trong range 1000-2100)
+    ...
+    return book  # FastAPI serialize theo BookResponse
+\`\`\`
+
+---
+
+## So sánh với Laravel
+
+| Laravel | FastAPI |
+|---|---|
+| \`$request->validate([...])\` | Pydantic tự validate |
+| \`ValidationException\` | \`422 Unprocessable Entity\` |
+| \`new BookResource($book)\` | \`response_model=BookResponse\` |
+| \`BookResource::collection($books)\` | \`response_model=list[BookResponse]\` |
+| \`$request->validated()\` | \`book_in.model_dump()\` |
+| \`$request->only([...])\` | \`book_in.model_dump(include={...})\` |
+| \`$request->except([...])\` | \`book_in.model_dump(exclude={...})\` |
+`},{id:`repository-pattern`,unit:9,title:`Repository Pattern — Tách Data Access Layer`,subtitle:`Design pattern quan trọng nhất — Generic BaseRepo, SOLID principles`,tags:[`repository`,`design-pattern`,`solid`,`clean-code`,`laravel`],readTime:10,keyTakeaway:`Repository = lớp trung gian giữa business logic và database. Controller không được biết db.query() là gì.`,content:`# Bài 9 — Repository Pattern: Tách Data Access Layer
+
+## Repository Pattern là gì?
+
+**Repository** là lớp trung gian giữa business logic và database. Nó ẩn đi chi tiết implementation của data access (SQLAlchemy queries) sau một interface rõ ràng.
+
+\`\`\`
+Endpoint/Controller
+        ↓
+    Service              ← Business logic
+        ↓
+   Repository            ← "Kho chứa" — chỉ lo về data
+        ↓
+    Database
+\`\`\`
+
+---
+
+## Tại sao cần Repository?
+
+### Không có Repository — Code bị lặp!
+
+\`\`\`python
+# books.py
+@router.get("/{book_id}")
+def get_book(book_id: int, db = Depends(get_db)):
+    book = db.query(Book).filter(Book.id == book_id).first()  # ← Lặp lần 1
+    if not book:
+        raise HTTPException(404, "Not found")
+    return book
+
+@router.patch("/{book_id}")
+def update_book(book_id: int, ...):
+    book = db.query(Book).filter(Book.id == book_id).first()  # ← Lặp lần 2
+    if not book:
+        raise HTTPException(404, "Not found")
+    ...
+
+@router.delete("/{book_id}")
+def delete_book(book_id: int, ...):
+    book = db.query(Book).filter(Book.id == book_id).first()  # ← Lặp lần 3!
+    ...
+\`\`\`
+
+**Vấn đề:** 3 chỗ giống nhau. Khi logic query thay đổi → phải sửa 3 chỗ.
+
+### Có Repository — DRY và clean
+
+\`\`\`python
+class BookRepository:
+    def get_by_id(self, book_id: int) -> Book | None:
+        return self.db.query(Book).filter(Book.id == book_id).first()
+
+# Endpoint chỉ gọi 1 nơi:
+repo.get_by_id(book_id)  # Mọi chỗ đều dùng method này
+\`\`\`
+
+---
+
+## Base Repository — Generic Pattern
+
+\`\`\`python
+# app/repositories/base.py
+from typing import TypeVar, Generic, Type, Any
+from sqlalchemy.orm import Session
+from app.db.base import Base
+
+ModelType = TypeVar("ModelType", bound=Base)
+
+class BaseRepository(Generic[ModelType]):
+    """
+    Generic repository — tất cả repos đều kế thừa.
+
+    Design Pattern: Template Method
+    - BaseRepository định nghĩa interface chung
+    - Subclass implement logic cụ thể
+    - Giống abstract BaseRepository trong Laravel
+
+    Laravel equivalent:
+    abstract class BaseRepository {
+        protected Model $model;
+        public function findById(int $id): ?Model { ... }
+        public function getAll(): Collection { ... }
+        abstract public function create(array $data): Model;
+    }
+    """
+    def __init__(self, model: Type[ModelType], db: Session):
+        self.model = model
+        self.db    = db
+
+    def get_by_id(self, id: int) -> ModelType | None:
+        """= Book::find($id)"""
+        return self.db.query(self.model).filter(self.model.id == id).first()
+
+    def get_all(self, skip: int = 0, limit: int = 100) -> list[ModelType]:
+        """= Book::skip($skip)->take($limit)->get()"""
+        return self.db.query(self.model).offset(skip).limit(limit).all()
+
+    def delete(self, obj: ModelType) -> None:
+        """= $book->delete()"""
+        self.db.delete(obj)
+        self.db.commit()
+\`\`\`
+
+---
+
+## CategoryRepository
+
+\`\`\`python
+# app/repositories/category_repo.py
+from sqlalchemy.orm import Session
+from app.models.category import Category
+from app.schemas.category import CategoryCreate, CategoryUpdate
+from .base import BaseRepository
+
+class CategoryRepository(BaseRepository[Category]):
+    """
+    Repository cho Category model.
+    Kế thừa get_by_id(), get_all(), delete() từ BaseRepository.
+    Thêm các methods đặc thù cho Category.
+    """
+    def __init__(self, db: Session):
+        super().__init__(Category, db)
+
+    def get_by_name(self, name: str) -> Category | None:
+        """Tìm theo tên — cho unique check"""
+        return (
+            self.db.query(Category)
+            .filter(Category.name == name)
+            .first()
+        )
+
+    def create(self, cat_in: CategoryCreate) -> Category:
+        category = Category(
+            name=cat_in.name,
+            description=cat_in.description,
+        )
+        self.db.add(category)
+        self.db.commit()
+        self.db.refresh(category)
+        return category
+
+    def update(self, category: Category, cat_in: CategoryUpdate) -> Category:
+        # exclude_unset=True — chỉ update fields được gửi lên
+        # Tránh null hóa fields không được truyền vào (PATCH behavior)
+        update_data = cat_in.model_dump(exclude_unset=True)
+        for field, value in update_data.items():
+            setattr(category, field, value)
+        self.db.commit()
+        self.db.refresh(category)
+        return category
+
+    def search(
+        self,
+        search: str | None = None,
+        skip: int = 0,
+        limit: int = 100,
+    ) -> list[Category]:
+        """Tìm kiếm + pagination"""
+        query = self.db.query(Category)
+        if search:
+            # ilike = case-insensitive LIKE
+            # = Category::where('name', 'like', "%{$search}%")->get()
+            query = query.filter(Category.name.ilike(f"%{search}%"))
+        return query.offset(skip).limit(limit).all()
+\`\`\`
+
+---
+
+## AuthorRepository
+
+\`\`\`python
+# app/repositories/author_repo.py
+from sqlalchemy.orm import Session
+from app.models.author import Author
+from app.schemas.author import AuthorCreate, AuthorUpdate
+from .base import BaseRepository
+
+class AuthorRepository(BaseRepository[Author]):
+    def __init__(self, db: Session):
+        super().__init__(Author, db)
+
+    def get_by_name(self, name: str) -> Author | None:
+        return self.db.query(Author).filter(Author.name == name).first()
+
+    def create(self, author_in: AuthorCreate) -> Author:
+        author = Author(**author_in.model_dump())
+        self.db.add(author)
+        self.db.commit()
+        self.db.refresh(author)
+        return author
+
+    def update(self, author: Author, author_in: AuthorUpdate) -> Author:
+        for field, value in author_in.model_dump(exclude_unset=True).items():
+            setattr(author, field, value)
+        self.db.commit()
+        self.db.refresh(author)
+        return author
+
+    def search(
+        self,
+        search: str | None = None,
+        skip: int = 0,
+        limit: int = 100,
+    ) -> list[Author]:
+        query = self.db.query(Author)
+        if search:
+            query = query.filter(Author.name.ilike(f"%{search}%"))
+        return query.offset(skip).limit(limit).all()
+\`\`\`
+
+---
+
+## BookRepository — Phức tạp hơn (có Eager Loading)
+
+\`\`\`python
+# app/repositories/book_repo.py
+from sqlalchemy.orm import Session, selectinload
+from sqlalchemy import or_
+from app.models.book import Book
+from app.schemas.book import BookCreate, BookUpdate
+from .base import BaseRepository
+
+class BookRepository(BaseRepository[Book]):
+    def __init__(self, db: Session):
+        super().__init__(Book, db)
+
+    def get_by_id_with_relations(self, book_id: int) -> Book | None:
+        """
+        Load book kèm author và category (eager loading).
+
+        Tại sao cần method riêng?
+        - get_by_id() từ Base trả về book nhưng KHÔNG load relationships
+        - Khi trả về API response (BookResponse), FastAPI cần book.author và book.category
+        - Nếu không eager load → N+1 problem
+
+        = Book::with(['author', 'category'])->find($id)
+        """
+        return (
+            self.db.query(Book)
+            .options(
+                selectinload(Book.author),    # Eager load author
+                selectinload(Book.category),  # Eager load category
+            )
+            .filter(Book.id == book_id)
+            .first()
+        )
+
+    def get_by_title(self, title: str) -> Book | None:
+        """Cho unique title check"""
+        return self.db.query(Book).filter(Book.title == title).first()
+
+    def create(self, book_in: BookCreate) -> Book:
+        book = Book(**book_in.model_dump())
+        self.db.add(book)
+        self.db.commit()
+        self.db.refresh(book)
+        # Return với relationships đã load
+        return self.get_by_id_with_relations(book.id)
+
+    def update(self, book: Book, book_in: BookUpdate) -> Book:
+        for field, value in book_in.model_dump(exclude_unset=True).items():
+            setattr(book, field, value)
+        self.db.commit()
+        self.db.refresh(book)
+        return self.get_by_id_with_relations(book.id)
+
+    def update_cover(self, book: Book, cover_path: str) -> Book:
+        book.cover_image = cover_path
+        self.db.commit()
+        self.db.refresh(book)
+        return book
+
+    def search(
+        self,
+        search: str | None = None,
+        author_id: int | None = None,
+        category_id: int | None = None,
+        year: int | None = None,
+        skip: int = 0,
+        limit: int = 100,
+    ) -> list[Book]:
+        """
+        Tìm kiếm sách với nhiều điều kiện.
+
+        = Book::with(['author', 'category'])
+              ->when($search, fn($q) => $q->where('title', 'like', "%$search%"))
+              ->when($authorId, fn($q) => $q->where('author_id', $authorId))
+              ->skip($skip)->take($limit)->get()
+        """
+        query = (
+            self.db.query(Book)
+            .options(
+                selectinload(Book.author),
+                selectinload(Book.category),
+            )
+        )
+        if search:
+            query = query.filter(
+                or_(
+                    Book.title.ilike(f"%{search}%"),
+                    Book.description.ilike(f"%{search}%"),
+                )
+            )
+        if author_id:
+            query = query.filter(Book.author_id == author_id)
+        if category_id:
+            query = query.filter(Book.category_id == category_id)
+        if year:
+            query = query.filter(Book.published_year == year)
+
+        return query.offset(skip).limit(limit).all()
+\`\`\`
+
+---
+
+## Dùng Repository trong Endpoint
+
+\`\`\`python
+# api/endpoints/books.py — Không có db.query() trực tiếp!
+@router.get("/{book_id}", response_model=BookResponse)
+def get_book(book_id: int, db: Session = Depends(get_db)):
+    repo = BookRepository(db)
+    book = repo.get_by_id_with_relations(book_id)
+    if not book:
+        raise HTTPException(404, "Book not found")
+    return book
+\`\`\`
+
+---
+
+## Lợi ích của Repository Pattern
+
+| Không có Repository | Có Repository |
+|---|---|
+| db.query() rải rác khắp nơi | Tập trung vào 1 file |
+| Đổi ORM → sửa nhiều file | Đổi ORM → chỉ sửa repo |
+| Khó test (phải mock SQLAlchemy) | Dễ test (mock repo) |
+| Trùng lặp code | DRY |
+| N+1 queries dễ xảy ra | Eager loading kiểm soát ở 1 chỗ |
+`},{id:`service-layer`,unit:10,title:`Service Layer Pattern — Business Logic`,subtitle:`Tách business logic khỏi endpoint — 3 tầng rõ ràng, SOLID principles`,tags:[`service`,`design-pattern`,`business-logic`,`solid`,`laravel`],readTime:9,keyTakeaway:`Endpoint = thin route handler. Service = business logic. Repository = data access. 3 tầng rõ ràng.`,content:`# Bài 10 — Service Layer Pattern: Business Logic
+
+## 3-Layer Architecture
+
+\`\`\`
+HTTP Request
+     ↓
+┌─────────────────────────┐
+│  Endpoint (API Layer)   │  ← Mỏng nhất. Chỉ parse request, call service, return response
+└───────────┬─────────────┘
+            ↓
+┌─────────────────────────┐
+│   Service (Logic Layer) │  ← Business logic. Validate rules, coordinate operations
+└───────────┬─────────────┘
+            ↓
+┌─────────────────────────┐
+│ Repository (Data Layer) │  ← Data access. Chỉ biết cách query/save database
+└───────────┬─────────────┘
+            ↓
+         Database
+\`\`\`
+
+---
+
+## Khi nào cần Service Layer?
+
+### Ví dụ: Tạo book mới
+
+\`\`\`python
+# ❌ Endpoint làm quá nhiều việc — vi phạm Single Responsibility
+@router.post("/books")
+def create_book(book_in: BookCreate, db = Depends(get_db)):
+    # 1. Validate author tồn tại
+    author = db.query(Author).filter(Author.id == book_in.author_id).first()
+    if not author:
+        raise HTTPException(404, "Author not found")
+
+    # 2. Validate category tồn tại
+    category = db.query(Category).filter(Category.id == book_in.category_id).first()
+    if not category:
+        raise HTTPException(404, "Category not found")
+
+    # 3. Check title unique
+    existing = db.query(Book).filter(Book.title == book_in.title).first()
+    if existing:
+        raise HTTPException(400, "Title already exists")
+
+    # 4. Create book
+    book = Book(**book_in.model_dump())
+    db.add(book)
+    db.commit()
+    db.refresh(book)
+
+    # 5. (Tương lai) Gửi notification
+    # 6. (Tương lai) Update search index
+    # 7. (Tương lai) Log activity
+
+    return book
+\`\`\`
+
+**Vấn đề:** Endpoint đang làm 7 việc! Khi thêm notification → phải sửa endpoint. Khi test → phải mock cả DB và email. **Sai!**
+
+---
+
+## CategoryService — Ví dụ cơ bản
+
+\`\`\`python
+# app/services/category_service.py
+from sqlalchemy.orm import Session
+from fastapi import HTTPException, status
+from app.repositories.category_repo import CategoryRepository
+from app.schemas.category import CategoryCreate, CategoryUpdate
+from app.models.category import Category
+
+class CategoryService:
+    """
+    Service cho Category.
+    Chứa toàn bộ business logic liên quan đến Category.
+
+    Design Pattern: Service Layer
+    - Tách business logic khỏi HTTP layer
+    - Tương đương Laravel Service class
+
+    Laravel equivalent:
+    class CategoryService {
+        public function __construct(
+            private CategoryRepository $repo
+        ) {}
+
+        public function create(array $data): Category { ... }
+        public function delete(int $id): void { ... }
+    }
+    """
+    def __init__(self, db: Session):
+        self.repo = CategoryRepository(db)
+
+    def get_category_or_404(self, category_id: int) -> Category:
+        """
+        Helper: Lấy category hoặc raise 404.
+        Dùng đi dùng lại trong nhiều methods.
+        = Category::findOrFail($id) trong Laravel
+        """
+        category = self.repo.get_by_id(category_id)
+        if not category:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=f"Category với id={category_id} không tìm thấy",
+            )
+        return category
+
+    def list_categories(
+        self,
+        search: str | None = None,
+        skip: int = 0,
+        limit: int = 100,
+    ) -> list[Category]:
+        return self.repo.search(search=search, skip=skip, limit=limit)
+
+    def get_category(self, category_id: int) -> Category:
+        return self.get_category_or_404(category_id)
+
+    def create_category(self, cat_in: CategoryCreate) -> Category:
+        """
+        Business rules cho tạo category:
+        1. Tên không được trùng
+        """
+        existing = self.repo.get_by_name(cat_in.name)
+        if existing:
+            raise HTTPException(
+                status_code=status.HTTP_409_CONFLICT,
+                detail=f"Category tên '{cat_in.name}' đã tồn tại",
+            )
+        return self.repo.create(cat_in)
+
+    def update_category(
+        self,
+        category_id: int,
+        cat_in: CategoryUpdate,
+    ) -> Category:
+        """
+        Business rules cho update category:
+        1. Category phải tồn tại
+        2. Tên mới không được trùng với category khác
+        """
+        category = self.get_category_or_404(category_id)
+
+        # Chỉ check unique nếu name được update VÀ khác với tên cũ
+        if cat_in.name and cat_in.name != category.name:
+            existing = self.repo.get_by_name(cat_in.name)
+            if existing:
+                raise HTTPException(
+                    status_code=status.HTTP_409_CONFLICT,
+                    detail=f"Category tên '{cat_in.name}' đã tồn tại",
+                )
+
+        return self.repo.update(category, cat_in)
+
+    def delete_category(self, category_id: int) -> None:
+        """
+        Business rules cho xóa category:
+        1. Category phải tồn tại
+        2. Không được xóa nếu còn books liên quan
+        """
+        category = self.get_category_or_404(category_id)
+
+        # Business rule: không xóa category có books
+        if category.books:
+            raise HTTPException(
+                status_code=status.HTTP_409_CONFLICT,
+                detail=f"Không thể xóa: category đang có {len(category.books)} cuốn sách",
+            )
+
+        self.repo.delete(category)
+\`\`\`
+
+---
+
+## BookService — Service phức tạp hơn
+
+\`\`\`python
+# app/services/book_service.py
+import os
+from sqlalchemy.orm import Session
+from fastapi import HTTPException, status
+from app.repositories.book_repo import BookRepository
+from app.repositories.author_repo import AuthorRepository
+from app.repositories.category_repo import CategoryRepository
+from app.schemas.book import BookCreate, BookUpdate
+from app.models.book import Book
+
+class BookService:
+    """
+    Service cho Book.
+    Coordinate nhiều repositories — đây là điểm mạnh của Service Layer.
+    """
+    def __init__(self, db: Session):
+        # Service có thể dùng nhiều repositories
+        self.book_repo     = BookRepository(db)
+        self.author_repo   = AuthorRepository(db)
+        self.category_repo = CategoryRepository(db)
+
+    def _validate_author_exists(self, author_id: int) -> None:
+        """Helper: validate author tồn tại"""
+        if not self.author_repo.get_by_id(author_id):
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=f"Author id={author_id} không tồn tại",
+            )
+
+    def _validate_category_exists(self, category_id: int) -> None:
+        """Helper: validate category tồn tại"""
+        if not self.category_repo.get_by_id(category_id):
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=f"Category id={category_id} không tồn tại",
+            )
+
+    def list_books(
+        self,
+        search: str | None = None,
+        author_id: int | None = None,
+        category_id: int | None = None,
+        year: int | None = None,
+        skip: int = 0,
+        limit: int = 20,
+    ) -> list[Book]:
+        return self.book_repo.search(
+            search=search,
+            author_id=author_id,
+            category_id=category_id,
+            year=year,
+            skip=skip,
+            limit=limit,
+        )
+
+    def get_book(self, book_id: int) -> Book:
+        book = self.book_repo.get_by_id_with_relations(book_id)
+        if not book:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=f"Book id={book_id} không tìm thấy",
+            )
+        return book
+
+    def create_book(self, book_in: BookCreate) -> Book:
+        """
+        Business rules:
+        1. Author phải tồn tại
+        2. Category phải tồn tại
+        3. Title phải unique
+        """
+        # Validate foreign keys — Service biết cách coordinate nhiều repos
+        self._validate_author_exists(book_in.author_id)
+        self._validate_category_exists(book_in.category_id)
+
+        # Check unique title
+        if self.book_repo.get_by_title(book_in.title):
+            raise HTTPException(
+                status_code=status.HTTP_409_CONFLICT,
+                detail=f"Sách tên '{book_in.title}' đã tồn tại",
+            )
+
+        return self.book_repo.create(book_in)
+
+    def update_book(self, book_id: int, book_in: BookUpdate) -> Book:
+        """
+        Business rules:
+        1. Book phải tồn tại
+        2. Nếu đổi author_id → author mới phải tồn tại
+        3. Nếu đổi category_id → category mới phải tồn tại
+        4. Nếu đổi title → title mới phải unique
+        """
+        book = self.get_book(book_id)
+
+        if book_in.author_id is not None:
+            self._validate_author_exists(book_in.author_id)
+
+        if book_in.category_id is not None:
+            self._validate_category_exists(book_in.category_id)
+
+        if book_in.title is not None and book_in.title != book.title:
+            if self.book_repo.get_by_title(book_in.title):
+                raise HTTPException(409, f"Sách tên '{book_in.title}' đã tồn tại")
+
+        return self.book_repo.update(book, book_in)
+
+    def delete_book(self, book_id: int) -> None:
+        """
+        Business rules:
+        1. Book phải tồn tại
+        2. Xóa file ảnh bìa nếu có
+        """
+        book = self.get_book(book_id)
+
+        # Side effect: xóa file ảnh bìa
+        if book.cover_image and os.path.exists(book.cover_image):
+            os.remove(book.cover_image)
+
+        self.book_repo.delete(book)
+
+    def update_cover_image(self, book_id: int, cover_path: str) -> Book:
+        """Upload ảnh bìa mới, xóa ảnh cũ nếu có"""
+        book = self.get_book(book_id)
+        old_cover = book.cover_image
+
+        book = self.book_repo.update_cover(book, cover_path)
+
+        # Xóa ảnh cũ sau khi update thành công
+        if old_cover and os.path.exists(old_cover) and old_cover != cover_path:
+            os.remove(old_cover)
+
+        return book
+\`\`\`
+
+---
+
+## Endpoint trở nên mỏng — "Thin Controller"
+
+\`\`\`python
+# api/endpoints/books.py — Chỉ 1-2 dòng mỗi endpoint!
+from app.services.book_service import BookService
+
+def get_service(db: Session = Depends(get_db)) -> BookService:
+    """Dependency: tạo BookService với DB session"""
+    return BookService(db)
+
+@router.get("/",   response_model=list[BookResponse])
+def list_books(
+    search: str | None = None,
+    author_id: int | None = None,
+    category_id: int | None = None,
+    skip: int = 0, limit: int = 20,
+    service: BookService = Depends(get_service),
+):
+    return service.list_books(
+        search=search, author_id=author_id,
+        category_id=category_id, skip=skip, limit=limit,
+    )
+
+@router.post("/",  response_model=BookResponse, status_code=201)
+def create_book(book_in: BookCreate, service = Depends(get_service)):
+    return service.create_book(book_in)          # 1 dòng!
+
+@router.get("/{book_id}", response_model=BookResponse)
+def get_book(book_id: int, service = Depends(get_service)):
+    return service.get_book(book_id)             # 1 dòng!
+
+@router.patch("/{book_id}", response_model=BookResponse)
+def update_book(book_id: int, book_in: BookUpdate, service = Depends(get_service)):
+    return service.update_book(book_id, book_in)  # 1 dòng!
+
+@router.delete("/{book_id}", status_code=204)
+def delete_book(book_id: int, service = Depends(get_service)):
+    service.delete_book(book_id)                 # 1 dòng!
+\`\`\`
+
+---
+
+## So sánh với Laravel
+
+\`\`\`php
+// Laravel — Thin Controller
+class BookController extends Controller {
+    public function __construct(
+        private BookService $service  // Laravel inject
+    ) {}
+
+    public function store(StoreBookRequest $request): BookResource {
+        $book = $this->service->create($request->validated());
+        return new BookResource($book);
+    }
+}
+\`\`\`
+
+\`\`\`python
+# FastAPI — Thin Endpoint
+@router.post("/", response_model=BookResponse, status_code=201)
+def create_book(book_in: BookCreate, service = Depends(get_service)):
+    return service.create_book(book_in)
+\`\`\`
+
+**Kết quả giống nhau, syntax khác nhau.**
+
+---
+
+## SOLID Principles trong 3-Layer Architecture
+
+| Principle | Áp dụng như nào |
+|---|---|
+| **S** — Single Responsibility | Mỗi layer 1 nhiệm vụ: Endpoint=HTTP, Service=Logic, Repo=Data |
+| **O** — Open/Closed | Thêm feature = thêm method trong Service, không sửa Endpoint |
+| **L** — Liskov | BookRepository kế thừa BaseRepository, dùng được thay thế |
+| **I** — Interface Segregation | Repo chỉ expose methods cần thiết |
+| **D** — Dependency Inversion | Endpoint phụ thuộc Service interface, không phụ thuộc SQLAlchemy |
+`},{id:`crud-complete`,unit:11,title:`Full CRUD — Apply 3 Layers thực tế`,subtitle:`Categories, Authors, Books với Repository + Service + Endpoint hoàn chỉnh`,tags:[`crud`,`categories`,`authors`,`books`,`full-stack`],readTime:9,keyTakeaway:`exclude_unset=True là key cho PATCH — chỉ update fields được gửi lên, không null hóa fields còn lại.`,content:`# Bài 11 — Full CRUD: Apply 3 Layers thực tế
+
+## File structure hoàn chỉnh
+
+\`\`\`
+app/
+├── models/
+│   ├── author.py       ← SQLAlchemy models
+│   ├── category.py
+│   └── book.py
+├── schemas/
+│   ├── author.py       ← Pydantic schemas
+│   ├── category.py
+│   └── book.py
+├── repositories/
+│   ├── base.py         ← Generic BaseRepository
+│   ├── author_repo.py
+│   ├── category_repo.py
+│   └── book_repo.py
+├── services/
+│   ├── author_service.py
+│   ├── category_service.py
+│   └── book_service.py
+└── api/endpoints/
+    ├── authors.py      ← Thin endpoints
+    ├── categories.py
+    └── books.py
+\`\`\`
+
+---
+
+## Full Categories CRUD
+
+### Endpoint
+
+\`\`\`python
+# app/api/endpoints/categories.py
+from fastapi import APIRouter, Depends, status
+from sqlalchemy.orm import Session
+from typing import List
+from app.api.deps import get_db
+from app.services.category_service import CategoryService
+from app.schemas.category import CategoryCreate, CategoryUpdate, CategoryResponse
+
+router = APIRouter()
+
+def get_service(db: Session = Depends(get_db)) -> CategoryService:
+    return CategoryService(db)
+
+@router.get(
+    "/",
+    response_model=List[CategoryResponse],
+    summary="Lấy danh sách categories",
+)
+def list_categories(
+    search: str | None = None,
+    skip: int = 0,
+    limit: int = 100,
+    service: CategoryService = Depends(get_service),
+):
+    """Lấy danh sách categories, hỗ trợ tìm kiếm theo tên."""
+    return service.list_categories(search=search, skip=skip, limit=limit)
+
+@router.post(
+    "/",
+    response_model=CategoryResponse,
+    status_code=status.HTTP_201_CREATED,
+    summary="Tạo category mới",
+)
+def create_category(
+    cat_in: CategoryCreate,
+    service: CategoryService = Depends(get_service),
+):
+    return service.create_category(cat_in)
+
+@router.get(
+    "/{category_id}",
+    response_model=CategoryResponse,
+    summary="Lấy category theo ID",
+)
+def get_category(
+    category_id: int,
+    service: CategoryService = Depends(get_service),
+):
+    return service.get_category(category_id)
+
+@router.patch(
+    "/{category_id}",
+    response_model=CategoryResponse,
+    summary="Cập nhật category (partial update)",
+)
+def update_category(
+    category_id: int,
+    cat_in: CategoryUpdate,
+    service: CategoryService = Depends(get_service),
+):
+    return service.update_category(category_id, cat_in)
+
+@router.delete(
+    "/{category_id}",
+    status_code=status.HTTP_204_NO_CONTENT,
+    summary="Xóa category",
+)
+def delete_category(
+    category_id: int,
+    service: CategoryService = Depends(get_service),
+):
+    service.delete_category(category_id)
+\`\`\`
+
+---
+
+## Full Books CRUD với File Upload
+
+\`\`\`python
+# app/api/endpoints/books.py
+import uuid, os, shutil
+from fastapi import APIRouter, Depends, UploadFile, File, status, HTTPException
+from sqlalchemy.orm import Session
+from typing import List
+from app.api.deps import get_db
+from app.services.book_service import BookService
+from app.schemas.book import BookCreate, BookUpdate, BookResponse
+
+router = APIRouter()
+COVERS_DIR = "app/static/covers"
+os.makedirs(COVERS_DIR, exist_ok=True)
+
+def get_service(db: Session = Depends(get_db)) -> BookService:
+    return BookService(db)
+
+@router.get("/", response_model=List[BookResponse])
+def list_books(
+    search: str | None = None,
+    author_id: int | None = None,
+    category_id: int | None = None,
+    year: int | None = None,
+    skip: int = 0,
+    limit: int = 20,
+    service: BookService = Depends(get_service),
+):
+    """
+    Lấy danh sách sách với bộ lọc:
+    - **search**: tìm theo tên hoặc mô tả
+    - **author_id**: lọc theo tác giả
+    - **category_id**: lọc theo danh mục
+    - **year**: lọc theo năm xuất bản
+    """
+    return service.list_books(
+        search=search, author_id=author_id,
+        category_id=category_id, year=year,
+        skip=skip, limit=limit,
+    )
+
+@router.post("/", response_model=BookResponse, status_code=201)
+def create_book(
+    book_in: BookCreate,
+    service: BookService = Depends(get_service),
+):
+    return service.create_book(book_in)
+
+@router.get("/{book_id}", response_model=BookResponse)
+def get_book(book_id: int, service: BookService = Depends(get_service)):
+    return service.get_book(book_id)
+
+@router.patch("/{book_id}", response_model=BookResponse)
+def update_book(
+    book_id: int,
+    book_in: BookUpdate,
+    service: BookService = Depends(get_service),
+):
+    return service.update_book(book_id, book_in)
+
+@router.delete("/{book_id}", status_code=204)
+def delete_book(book_id: int, service: BookService = Depends(get_service)):
+    service.delete_book(book_id)
+
+@router.post("/{book_id}/cover", response_model=BookResponse)
+def upload_cover(
+    book_id: int,
+    file: UploadFile = File(..., description="File ảnh bìa sách (JPG, PNG, WebP)"),
+    service: BookService = Depends(get_service),
+):
+    """Upload hoặc thay thế ảnh bìa sách."""
+    # Validate file type
+    ALLOWED_TYPES = {"image/jpeg", "image/png", "image/webp"}
+    if file.content_type not in ALLOWED_TYPES:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Định dạng file không được hỗ trợ. Chỉ chấp nhận: {ALLOWED_TYPES}",
+        )
+
+    # Validate file size (5MB)
+    content = file.file.read()
+    MAX_SIZE = 5 * 1024 * 1024  # 5MB
+    if len(content) > MAX_SIZE:
+        raise HTTPException(status_code=400, detail="File quá lớn. Tối đa 5MB.")
+
+    # Lưu file với tên unique (tránh conflict)
+    ext      = os.path.splitext(file.filename or "")[1]  # ".jpg", ".png"...
+    filename = f"{uuid.uuid4()}{ext}"                    # "abc123-def456.jpg"
+    filepath = f"{COVERS_DIR}/{filename}"
+
+    with open(filepath, "wb") as buf:
+        buf.write(content)
+
+    return service.update_cover_image(book_id, f"static/covers/{filename}")
+\`\`\`
+
+---
+
+## PATCH vs PUT — Hiểu sự khác nhau
+
+\`\`\`python
+# PUT = thay thế toàn bộ resource
+# PATCH = chỉ cập nhật fields được gửi
+
+# Client gửi PATCH với chỉ title:
+# {"title": "Python 3 Advanced"}
+# → Chỉ title được update, description và year giữ nguyên
+
+# Chìa khóa: exclude_unset=True trong update()
+def update(self, book: Book, book_in: BookUpdate) -> Book:
+    # model_dump() trả về TẤT CẢ fields kể cả None
+    # model_dump(exclude_unset=True) chỉ trả về fields được SET
+    update_data = book_in.model_dump(exclude_unset=True)
+
+    # VD: {"title": "Python 3 Advanced"}
+    # KHÔNG có "description": None (không bị ghi đè!)
+
+    for field, value in update_data.items():
+        setattr(book, field, value)
+
+    self.db.commit()
+    self.db.refresh(book)
+    return book
+\`\`\`
+
+---
+
+## Xử lý Pagination
+
+\`\`\`python
+# GET /books?skip=0&limit=10   → trang 1 (records 1-10)
+# GET /books?skip=10&limit=10  → trang 2 (records 11-20)
+# GET /books?skip=20&limit=10  → trang 3 (records 21-30)
+
+# Trả về pagination metadata — option nâng cao
+from pydantic import BaseModel
+
+class PaginatedBooksResponse(BaseModel):
+    total: int
+    skip: int
+    limit: int
+    data: list[BookResponse]
+
+@router.get("/", response_model=PaginatedBooksResponse)
+def list_books(skip: int = 0, limit: int = 20, ...):
+    books = service.list_books(skip=skip, limit=limit, ...)
+    total = service.count_books(...)  # Tổng số records
+
+    return {
+        "total": total,
+        "skip": skip,
+        "limit": limit,
+        "data": books,
+    }
+
+# Response:
+# {
+#   "total": 150,
+#   "skip": 0,
+#   "limit": 20,
+#   "data": [...]
+# }
+\`\`\`
+
+---
+
+## Đăng ký tất cả routers trong main.py
+
+\`\`\`python
+# app/main.py — Hoàn chỉnh
+from fastapi import FastAPI
+from fastapi.staticfiles import StaticFiles
+from fastapi.middleware.cors import CORSMiddleware
+from app.api.endpoints import authors, categories, books
+from app.core.config import settings
+
+app = FastAPI(
+    title=settings.PROJECT_NAME,
+    version="1.0.0",
+    description="""
+## Book Management API
+
+API quản lý sách, tác giả và danh mục.
+
+### Tính năng:
+- CRUD đầy đủ cho Books, Authors, Categories
+- Tìm kiếm và lọc
+- Upload ảnh bìa sách
+- Swagger UI tại /docs
+    """,
+)
+
+# CORS — cho phép frontend gọi API
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:3000", "https://yourfrontend.com"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# Static files — serve ảnh bìa sách
+app.mount("/static", StaticFiles(directory="app/static"), name="static")
+
+# Đăng ký routers
+app.include_router(authors.router,    prefix="/authors",    tags=["Authors"])
+app.include_router(categories.router, prefix="/categories", tags=["Categories"])
+app.include_router(books.router,      prefix="/books",      tags=["Books"])
+
+@app.get("/", tags=["Health"])
+def health_check():
+    return {
+        "status": "ok",
+        "version": "1.0.0",
+        "docs": "/docs",
+    }
+\`\`\`
+
+---
+
+## Test nhanh trên Swagger UI
+
+\`\`\`
+1. Mở http://localhost:8000/docs
+2. Tạo Author: POST /authors/ → {"name": "Nguyễn Nhật Ánh", "bio": "Nhà văn Việt Nam"}
+3. Tạo Category: POST /categories/ → {"name": "Văn học", "description": "Sách văn học"}
+4. Tạo Book: POST /books/ → {"title": "Cho tôi xin một vé đi tuổi thơ", "author_id": 1, "category_id": 1, "published_year": 2008}
+5. Upload cover: POST /books/1/cover → chọn file ảnh
+6. Tìm kiếm: GET /books/?search=tuổi thơ
+7. Lọc: GET /books/?author_id=1&category_id=1
+\`\`\`
+`},{id:`testing`,unit:12,title:`Testing — pytest vs PHPUnit/Pest`,subtitle:`TestClient, fixtures, transaction rollback, unit + integration tests`,tags:[`testing`,`pytest`,`phpunit`,`laravel`,`tdd`],readTime:9,keyTakeaway:`pytest fixtures = Laravel setUp(). Transaction rollback = RefreshDatabase. 1 fixture có thể phụ thuộc fixture khác.`,content:`# Bài 12 — Testing: pytest vs PHPUnit/Pest
+
+## So sánh Testing Frameworks
+
+| Laravel | FastAPI | Mô tả |
+|---|---|---|
+| \`php artisan test\` | \`pytest\` | Chạy tests |
+| \`RefreshDatabase\` | Transaction rollback | Reset DB sau mỗi test |
+| \`$this->get('/api/books')\` | \`client.get("/books/")\` | HTTP assertions |
+| \`setUp()\` | \`@pytest.fixture\` | Test setup |
+| \`$this->assertStatus(201)\` | \`assert response.status_code == 201\` | Status check |
+| \`$this->assertJson([...])\` | \`assert response.json() == {...}\` | JSON check |
+| \`Author::factory()->create()\` | pytest fixture | Test data factory |
+| \`actingAs($user)\` | Override \`get_db\` | Auth bypass |
+
+---
+
+## Setup
+
+\`\`\`bash
+pip install pytest pytest-asyncio httpx
+\`\`\`
+
+---
+
+## tests/conftest.py — Shared Fixtures
+
+\`\`\`python
+# tests/conftest.py
+import pytest
+from fastapi.testclient import TestClient
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+
+from app.main import app
+from app.db.base import Base
+from app.api.deps import get_db
+
+# ── Test Database ────────────────────────────────────────────
+# Dùng SQLite riêng cho tests — không đụng development DB
+TEST_DATABASE_URL = "sqlite:///./test.db"
+test_engine = create_engine(
+    TEST_DATABASE_URL,
+    connect_args={"check_same_thread": False},
+)
+TestSessionLocal = sessionmaker(bind=test_engine)
+
+@pytest.fixture(scope="session", autouse=True)
+def setup_test_database():
+    """
+    Tạo tất cả tables một lần cho cả test session.
+    Tương đương: Laravel TestCase::setUpBeforeClass()
+    """
+    Base.metadata.create_all(bind=test_engine)
+    yield
+    Base.metadata.drop_all(bind=test_engine)
+
+@pytest.fixture
+def db():
+    """
+    DB session cho mỗi test — rollback sau khi xong.
+
+    Pattern: Transaction Rollback
+    - Mỗi test chạy trong transaction riêng
+    - Khi test xong → rollback → DB sạch như mới
+    - Không cần truncate tables, không tốn thời gian
+
+    Tương đương: Laravel RefreshDatabase trait
+    """
+    connection  = test_engine.connect()
+    transaction = connection.begin()
+    session     = TestSessionLocal(bind=connection)
+
+    yield session  # Test nhận DB session này
+
+    session.close()
+    transaction.rollback()   # ← ROLLBACK tất cả changes của test
+    connection.close()
+
+@pytest.fixture
+def client(db):
+    """
+    TestClient với DB được override.
+    Tương đương: $this->app (Laravel test instance với fresh state)
+    """
+    def override_get_db():
+        yield db
+
+    # Override dependency — thay DB thật bằng test DB
+    app.dependency_overrides[get_db] = override_get_db
+
+    with TestClient(app) as c:
+        yield c
+
+    app.dependency_overrides.clear()
+
+# ── Factory Fixtures ─────────────────────────────────────────
+@pytest.fixture
+def author(db):
+    """
+    Tạo author test data.
+    Tương đương: Author::factory()->create(['name' => 'Test Author'])
+    """
+    from app.models.author import Author
+    author = Author(name="Nguyễn Nhật Ánh", bio="Nhà văn Việt Nam")
+    db.add(author)
+    db.commit()
+    db.refresh(author)
+    return author
+
+@pytest.fixture
+def category(db):
+    """Tạo category test data"""
+    from app.models.category import Category
+    cat = Category(name="Văn học", description="Sách văn học Việt Nam")
+    db.add(cat)
+    db.commit()
+    db.refresh(cat)
+    return cat
+
+@pytest.fixture
+def book(db, author, category):
+    """
+    Tạo book test data — phụ thuộc vào author và category fixtures.
+    pytest tự inject author và category vào fixture này.
+    """
+    from app.models.book import Book
+    b = Book(
+        title="Cho tôi xin một vé đi tuổi thơ",
+        author_id=author.id,
+        category_id=category.id,
+        published_year=2008,
+    )
+    db.add(b)
+    db.commit()
+    db.refresh(b)
+    return b
+\`\`\`
+
+---
+
+## tests/test_categories.py
+
+\`\`\`python
+# tests/test_categories.py
+import pytest
+
+
+class TestListCategories:
+    def test_empty_list(self, client):
+        """Khi chưa có data → trả về list rỗng"""
+        response = client.get("/categories/")
+        assert response.status_code == 200
+        assert response.json() == []
+
+    def test_returns_existing_categories(self, client, category):
+        """Trả về đúng categories đã tạo"""
+        response = client.get("/categories/")
+        assert response.status_code == 200
+        data = response.json()
+        assert len(data) == 1
+        assert data[0]["name"] == category.name
+        assert data[0]["id"] == category.id
+
+    def test_search_by_name(self, client, category):
+        """Tìm kiếm theo tên"""
+        response = client.get(f"/categories/?search={category.name[:3]}")
+        assert response.status_code == 200
+        assert len(response.json()) == 1
+
+
+class TestCreateCategory:
+    def test_create_success(self, client):
+        """Tạo category thành công"""
+        payload = {"name": "Khoa học", "description": "Sách khoa học"}
+        response = client.post("/categories/", json=payload)
+
+        assert response.status_code == 201
+        data = response.json()
+        assert data["id"] is not None
+        assert data["name"] == "Khoa học"
+        assert data["description"] == "Sách khoa học"
+
+    def test_create_without_description(self, client):
+        """Description là optional"""
+        response = client.post("/categories/", json={"name": "Thiếu nhi"})
+        assert response.status_code == 201
+        assert response.json()["description"] is None
+
+    def test_create_duplicate_name(self, client, category):
+        """409 khi tên đã tồn tại"""
+        response = client.post("/categories/", json={"name": category.name})
+        assert response.status_code == 409
+        assert "đã tồn tại" in response.json()["detail"]
+
+    def test_create_missing_required_field(self, client):
+        """422 khi thiếu required field"""
+        response = client.post("/categories/", json={"description": "No name!"})
+        assert response.status_code == 422
+
+    def test_create_empty_name(self, client):
+        """422 khi tên rỗng"""
+        response = client.post("/categories/", json={"name": ""})
+        assert response.status_code == 422
+
+
+class TestGetCategory:
+    def test_get_existing(self, client, category):
+        """Lấy category theo ID"""
+        response = client.get(f"/categories/{category.id}")
+        assert response.status_code == 200
+        data = response.json()
+        assert data["id"] == category.id
+        assert data["name"] == category.name
+
+    def test_get_not_found(self, client):
+        """404 khi ID không tồn tại"""
+        response = client.get("/categories/9999")
+        assert response.status_code == 404
+
+
+class TestUpdateCategory:
+    def test_update_name_only(self, client, category):
+        """PATCH — chỉ update name, description không đổi"""
+        original_desc = category.description
+        response = client.patch(
+            f"/categories/{category.id}",
+            json={"name": "Văn học nước ngoài"},
+        )
+        assert response.status_code == 200
+        data = response.json()
+        assert data["name"] == "Văn học nước ngoài"
+        assert data["description"] == original_desc  # Không bị đổi!
+
+    def test_update_not_found(self, client):
+        """404 khi ID không tồn tại"""
+        response = client.patch("/categories/9999", json={"name": "New"})
+        assert response.status_code == 404
+
+    def test_update_duplicate_name(self, client, db):
+        """409 khi đổi tên trùng với category khác"""
+        from app.models.category import Category
+        # Tạo thêm 1 category
+        other = Category(name="Thiếu nhi")
+        db.add(other)
+        db.commit()
+        db.refresh(other)
+
+        # Cố đổi tên thành tên của other → conflict
+        response = client.patch(
+            f"/categories/{other.id}",
+            json={"name": "Văn học"},  # Tên đã có từ fixture
+        )
+        # Note: Fixture "category" có name="Văn học"
+        # Test này phụ thuộc vào fixture category
+        # Cần dùng cùng client fixture (có category fixture)
+
+
+class TestDeleteCategory:
+    def test_delete_success(self, client, category):
+        """Xóa category thành công"""
+        response = client.delete(f"/categories/{category.id}")
+        assert response.status_code == 204
+
+        # Verify đã bị xóa
+        get_response = client.get(f"/categories/{category.id}")
+        assert get_response.status_code == 404
+
+    def test_cannot_delete_with_books(self, client, book):
+        """
+        409 khi category còn có books.
+        Business rule: không xóa category đang được dùng.
+        book fixture đã tạo book với category_id → category có books.
+        """
+        response = client.delete(f"/categories/{book.category_id}")
+        assert response.status_code == 409
+        assert "sách" in response.json()["detail"].lower()
+\`\`\`
+
+---
+
+## tests/test_books.py
+
+\`\`\`python
+# tests/test_books.py
+import pytest
+
+
+class TestCreateBook:
+    def test_create_success(self, client, author, category):
+        """Tạo book thành công với nested response"""
+        payload = {
+            "title": "Tôi thấy hoa vàng trên cỏ xanh",
+            "author_id": author.id,
+            "category_id": category.id,
+            "published_year": 2010,
+            "description": "Truyện về tuổi thơ",
+        }
+        response = client.post("/books/", json=payload)
+
+        assert response.status_code == 201
+        data = response.json()
+        assert data["title"] == "Tôi thấy hoa vàng trên cỏ xanh"
+        assert data["published_year"] == 2010
+
+        # Kiểm tra nested response — author object, không chỉ author_id
+        assert data["author"]["id"] == author.id
+        assert data["author"]["name"] == author.name
+
+        # Kiểm tra category object
+        assert data["category"]["name"] == category.name
+
+    def test_create_invalid_author_id(self, client, category):
+        """404 khi author_id không tồn tại"""
+        response = client.post("/books/", json={
+            "title": "Test Book",
+            "author_id": 9999,      # Không tồn tại
+            "category_id": category.id,
+        })
+        assert response.status_code == 404
+        assert "Author" in response.json()["detail"]
+
+    def test_create_invalid_category_id(self, client, author):
+        """404 khi category_id không tồn tại"""
+        response = client.post("/books/", json={
+            "title": "Test Book",
+            "author_id": author.id,
+            "category_id": 9999,    # Không tồn tại
+        })
+        assert response.status_code == 404
+        assert "Category" in response.json()["detail"]
+
+    def test_create_duplicate_title(self, client, book):
+        """409 khi title đã tồn tại"""
+        response = client.post("/books/", json={
+            "title": book.title,    # Title đã tồn tại
+            "author_id": book.author_id,
+            "category_id": book.category_id,
+        })
+        assert response.status_code == 409
+
+    def test_create_invalid_year(self, client, author, category):
+        """422 khi năm xuất bản không hợp lệ"""
+        response = client.post("/books/", json={
+            "title": "Test Book",
+            "author_id": author.id,
+            "category_id": category.id,
+            "published_year": 500,  # Nhỏ hơn 1000
+        })
+        assert response.status_code == 422
+
+
+class TestSearchBooks:
+    def test_search_by_title(self, client, book):
+        """Tìm kiếm theo tên — case-insensitive"""
+        # Tìm với phần đầu của title
+        response = client.get(f"/books/?search={book.title[:5]}")
+        assert response.status_code == 200
+        books = response.json()
+        assert any(b["title"] == book.title for b in books)
+
+    def test_filter_by_author(self, client, book):
+        """Lọc theo author_id"""
+        response = client.get(f"/books/?author_id={book.author_id}")
+        assert response.status_code == 200
+        books = response.json()
+        assert all(b["author"]["id"] == book.author_id for b in books)
+
+    def test_filter_by_category(self, client, book):
+        """Lọc theo category_id"""
+        response = client.get(f"/books/?category_id={book.category_id}")
+        assert response.status_code == 200
+        books = response.json()
+        assert all(b["category"]["id"] == book.category_id for b in books)
+
+    def test_pagination(self, client, db, author, category):
+        """Test pagination với skip và limit"""
+        from app.models.book import Book
+        # Tạo 5 books
+        for i in range(5):
+            b = Book(title=f"Book {i}", author_id=author.id, category_id=category.id)
+            db.add(b)
+        db.commit()
+
+        # Trang 1: 2 records
+        response = client.get("/books/?skip=0&limit=2")
+        assert len(response.json()) == 2
+
+        # Trang 2: 2 records khác
+        page1 = client.get("/books/?skip=0&limit=2").json()
+        page2 = client.get("/books/?skip=2&limit=2").json()
+        assert page1[0]["title"] != page2[0]["title"]
+
+
+class TestUpdateBook:
+    def test_partial_update(self, client, book):
+        """PATCH — chỉ update fields được gửi"""
+        original_title = book.title
+        response = client.patch(
+            f"/books/{book.id}",
+            json={"published_year": 2024},  # Chỉ update year
+        )
+        assert response.status_code == 200
+        data = response.json()
+        assert data["published_year"] == 2024
+        assert data["title"] == original_title  # Title không bị thay đổi!
+\`\`\`
+
+---
+
+## Chạy tests
+
+\`\`\`bash
+pytest                               # Tất cả tests
+pytest tests/test_categories.py     # 1 file
+pytest tests/test_categories.py::TestCreateCategory  # 1 class
+pytest tests/test_categories.py::TestCreateCategory::test_create_success  # 1 test
+pytest -v                            # Verbose — thấy từng test pass/fail
+pytest -v --tb=short                 # Traceback ngắn hơn
+pytest --cov=app --cov-report=term   # Coverage report
+pytest -k "test_create"              # Chạy tất cả tests có "test_create" trong tên
+pytest -x                            # Dừng khi gặp test đầu tiên fail
+\`\`\`
+
+---
+
+## Coverage Report
+
+\`\`\`bash
+pytest --cov=app --cov-report=html
+# Mở htmlcov/index.html để xem coverage trực quan
+
+# Target: 80% coverage minimum
+# Trong CI/CD:
+pytest --cov=app --cov-fail-under=80
+\`\`\`
+`},{id:`error-handling`,unit:13,title:`Error Handling — Custom Exception Handler`,subtitle:`HTTPException, global handler, consistent error format, structured logging`,tags:[`errors`,`exceptions`,`handler`,`laravel`,`api`],readTime:6,keyTakeaway:`Consistent error format quan trọng cho FE. Global handler standardize tất cả errors — FE xử lý 1 format duy nhất.`,content:`# Bài 13 — Error Handling: Custom Exception Handler
+
+## So sánh với Laravel Exception Handler
+
+### Laravel — app/Exceptions/Handler.php
+
+\`\`\`php
+class Handler extends ExceptionHandler {
+    public function render($request, Throwable $e): Response {
+        if ($e instanceof ModelNotFoundException) {
+            return response()->json([
+                'error' => 'NOT_FOUND',
+                'message' => 'Resource không tìm thấy',
+            ], 404);
+        }
+
+        if ($e instanceof ValidationException) {
+            return response()->json([
+                'error' => 'VALIDATION_ERROR',
+                'errors' => $e->errors(),
+            ], 422);
+        }
+
+        return parent::render($request, $e);
+    }
+}
+\`\`\`
+
+### FastAPI — Global Exception Handlers
+
+\`\`\`python
+# app/main.py
+from fastapi import FastAPI, Request, status
+from fastapi.responses import JSONResponse
+from fastapi.exceptions import RequestValidationError
+from sqlalchemy.exc import IntegrityError
+import logging
+
+logger = logging.getLogger(__name__)
+app = FastAPI(...)
+
+def error_response(code: str, message: str, details=None) -> dict:
+    """
+    Consistent error format cho tất cả responses.
+    FE team chỉ cần xử lý 1 format duy nhất.
+    """
+    res = {"error": {"code": code, "message": message}}
+    if details:
+        res["error"]["details"] = details
+    return res
+
+# ── 422 Validation Error (Pydantic) ───────────────────────────
+@app.exception_handler(RequestValidationError)
+async def validation_exception_handler(
+    request: Request,
+    exc: RequestValidationError,
+):
+    """
+    Override default Pydantic validation error format.
+    Tương đương: Laravel ValidationException handler
+    """
+    errors = []
+    for error in exc.errors():
+        # Lọc bỏ "body" từ location path
+        loc = [str(l) for l in error["loc"] if l != "body"]
+        field = " → ".join(loc) if loc else "unknown"
+        errors.append({
+            "field": field,
+            "message": error["msg"],
+            "type": error["type"],
+        })
+
+    return JSONResponse(
+        status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+        content=error_response(
+            code="VALIDATION_ERROR",
+            message="Dữ liệu đầu vào không hợp lệ",
+            details=errors,
+        ),
+    )
+
+# ── 404 Not Found ─────────────────────────────────────────────
+@app.exception_handler(404)
+async def not_found_handler(request: Request, exc):
+    return JSONResponse(
+        status_code=404,
+        content=error_response(
+            code="NOT_FOUND",
+            message=exc.detail if hasattr(exc, 'detail') else "Không tìm thấy resource",
+        ),
+    )
+
+# ── 409 Conflict ──────────────────────────────────────────────
+@app.exception_handler(409)
+async def conflict_handler(request: Request, exc):
+    return JSONResponse(
+        status_code=409,
+        content=error_response(
+            code="CONFLICT",
+            message=exc.detail if hasattr(exc, 'detail') else "Conflict",
+        ),
+    )
+
+# ── 500 Internal Server Error ─────────────────────────────────
+@app.exception_handler(Exception)
+async def generic_exception_handler(request: Request, exc: Exception):
+    # Log chi tiết để debug
+    logger.error(
+        f"Unhandled exception: {type(exc).__name__}",
+        exc_info=True,
+        extra={
+            "path": str(request.url),
+            "method": request.method,
+        }
+    )
+    # Trả về thông điệp chung chung (không lộ internal error)
+    return JSONResponse(
+        status_code=500,
+        content=error_response(
+            code="INTERNAL_ERROR",
+            message="Lỗi server. Vui lòng thử lại sau.",
+        ),
+    )
+\`\`\`
+
+---
+
+## Custom Exception Classes
+
+\`\`\`python
+# app/core/exceptions.py
+from fastapi import HTTPException, status
+
+class NotFoundException(HTTPException):
+    """404 — Resource không tìm thấy"""
+    def __init__(self, resource: str, id: int):
+        super().__init__(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"{resource} với id={id} không tìm thấy",
+        )
+
+class ConflictException(HTTPException):
+    """409 — Trùng lặp dữ liệu"""
+    def __init__(self, message: str):
+        super().__init__(
+            status_code=status.HTTP_409_CONFLICT,
+            detail=message,
+        )
+
+class InvalidFileException(HTTPException):
+    """400 — File không hợp lệ"""
+    def __init__(self, content_type: str, allowed: set):
+        super().__init__(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Định dạng '{content_type}' không được hỗ trợ. Chỉ chấp nhận: {allowed}",
+        )
+
+class BusinessRuleException(HTTPException):
+    """422 — Vi phạm business rule"""
+    def __init__(self, message: str):
+        super().__init__(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail=message,
+        )
+
+# Dùng trong service — rõ ràng hơn raise HTTPException(404)
+raise NotFoundException("Book", book_id)
+raise ConflictException(f"Sách tên '{title}' đã tồn tại")
+raise InvalidFileException(content_type, {"image/jpeg", "image/png"})
+\`\`\`
+
+---
+
+## Error Response Format thống nhất
+
+\`\`\`json
+// 404 Not Found
+{
+  "error": {
+    "code": "NOT_FOUND",
+    "message": "Book với id=5 không tìm thấy"
+  }
+}
+
+// 409 Conflict
+{
+  "error": {
+    "code": "CONFLICT",
+    "message": "Sách tên 'Python 101' đã tồn tại"
+  }
+}
+
+// 422 Validation Error
+{
+  "error": {
+    "code": "VALIDATION_ERROR",
+    "message": "Dữ liệu đầu vào không hợp lệ",
+    "details": [
+      {
+        "field": "title",
+        "message": "Field required",
+        "type": "missing"
+      },
+      {
+        "field": "published_year",
+        "message": "Năm xuất bản phải từ 1000 đến 2100",
+        "type": "value_error"
+      }
+    ]
+  }
+}
+
+// 500 Internal Server Error
+{
+  "error": {
+    "code": "INTERNAL_ERROR",
+    "message": "Lỗi server. Vui lòng thử lại sau."
+  }
+}
+\`\`\`
+
+---
+
+## HTTP Status Codes — Dùng đúng mới chuyên nghiệp
+
+| Code | Ý nghĩa | Khi nào dùng |
+|---|---|---|
+| 200 | OK | GET, PATCH thành công |
+| 201 | Created | POST tạo mới thành công |
+| 204 | No Content | DELETE thành công |
+| 400 | Bad Request | Request không hợp lệ (vd: file quá lớn) |
+| 404 | Not Found | Resource không tồn tại |
+| 409 | Conflict | Trùng lặp (vd: email đã có) |
+| 422 | Unprocessable | Pydantic validation fail |
+| 500 | Server Error | Lỗi không xử lý được |
+
+---
+
+## Logging đúng cách
+
+\`\`\`python
+# app/core/logging_config.py
+import logging
+import json
+from datetime import datetime
+
+class JsonFormatter(logging.Formatter):
+    """Structured logging — dễ search trên Datadog/Kibana"""
+    def format(self, record: logging.LogRecord) -> str:
+        log = {
+            "timestamp": datetime.utcnow().isoformat(),
+            "level": record.levelname,
+            "message": record.getMessage(),
+            "module": record.module,
+            "function": record.funcName,
+        }
+        # Thêm extra fields nếu có
+        for key, value in record.__dict__.items():
+            if key not in logging.LogRecord.__dict__ and not key.startswith('_'):
+                log[key] = value
+
+        if record.exc_info:
+            log["exception"] = self.formatException(record.exc_info)
+
+        return json.dumps(log, ensure_ascii=False)
+
+def setup_logging(debug: bool = False):
+    handler = logging.StreamHandler()
+    handler.setFormatter(JsonFormatter())
+    logging.basicConfig(
+        level=logging.DEBUG if debug else logging.INFO,
+        handlers=[handler],
+    )
+
+# Dùng trong service
+logger = logging.getLogger(__name__)
+
+# ✅ Structured logging
+logger.info("book.created", extra={"book_id": book.id, "title": book.title})
+logger.error("book.delete_failed", extra={"book_id": book_id}, exc_info=True)
+
+# ❌ Không làm thế này — khó search, không có context
+logger.info(f"Created book {book.id}")
+print(f"Error: {e}")
+\`\`\`
+`},{id:`deployment`,unit:14,title:`Deploy Production — PostgreSQL, Docker, Checklist`,subtitle:`Switch SQLite sang PostgreSQL, Docker, CI/CD, production checklist đầy đủ`,tags:[`deployment`,`postgresql`,`docker`,`ci-cd`,`laravel`],readTime:8,keyTakeaway:`DATABASE_URL là cách duy nhất switch environment. Code không đổi một chữ — đây là sức mạnh của 12-factor app.`,content:`# Bài 14 — Deploy Production: PostgreSQL, Docker, Checklist
+
+## Switch SQLite → PostgreSQL
+
+Đây là điểm mạnh nhất của setup — **không cần đổi code**!
+
+### Laravel — cũng tương tự
+
+\`\`\`bash
+# .env.development
+DB_CONNECTION=sqlite
+DB_DATABASE=database/database.sqlite
+
+# .env.production
+DB_CONNECTION=pgsql
+DB_HOST=prod-host
+DB_DATABASE=bookdb
+DB_USERNAME=bookuser
+DB_PASSWORD=secret
+\`\`\`
+
+### FastAPI — đơn giản hơn, chỉ 1 biến
+
+\`\`\`bash
+# .env.development
+DATABASE_URL=sqlite:///./app.db
+DEBUG=True
+
+# .env.production — chỉ đổi 1 dòng!
+DATABASE_URL=postgresql://bookuser:secret@prod-host:5432/bookdb
+DEBUG=False
+SECRET_KEY=super-long-random-key-here
+\`\`\`
+
+\`\`\`bash
+# Cài PostgreSQL driver
+pip install psycopg2-binary
+
+# Apply migrations lên PostgreSQL mới
+alembic upgrade head
+\`\`\`
+
+---
+
+## requirements.txt
+
+\`\`\`bash
+# Tạo requirements.txt
+pip freeze > requirements.txt
+\`\`\`
+
+\`\`\`
+# requirements.txt
+fastapi[standard]==0.115.0
+sqlalchemy==2.0.36
+alembic==1.13.3
+python-multipart==0.0.12
+psycopg2-binary==2.9.10
+pydantic-settings==2.5.2
+pytest==8.3.0
+pytest-asyncio==0.24.0
+httpx==0.27.0
+\`\`\`
+
+---
+
+## Dockerfile
+
+\`\`\`dockerfile
+# Dockerfile
+FROM python:3.12-slim
+
+WORKDIR /app
+
+# Install dependencies trước (Docker layer caching)
+# Chỉ rebuild khi requirements.txt thay đổi
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy source code
+COPY . .
+
+# Tạo thư mục static (volume mount sẽ override)
+RUN mkdir -p app/static/covers
+
+EXPOSE 8000
+
+# Production: nhiều workers, không reload
+# Tương đương: php-fpm với pool workers
+CMD ["uvicorn", "app.main:app", \\
+     "--host", "0.0.0.0", \\
+     "--port", "8000", \\
+     "--workers", "4"]
+\`\`\`
+
+\`\`\`bash
+# Build và chạy
+docker build -t book-api .
+docker run \\
+  -p 8000:8000 \\
+  -e DATABASE_URL=postgresql://... \\
+  -e SECRET_KEY=your-secret \\
+  -v $(pwd)/app/static:/app/app/static \\
+  book-api
+\`\`\`
+
+---
+
+## docker-compose.yml — Development
+
+\`\`\`yaml
+# docker-compose.yml
+version: '3.8'
+
+services:
+  api:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: postgresql://bookuser:secret@db/bookdb
+      DEBUG: "true"
+    volumes:
+      - ./app:/app/app      # Hot reload code
+      - static_files:/app/app/static
+    command: uvicorn app.main:app --host 0.0.0.0 --reload
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: bookdb
+      POSTGRES_USER: bookuser
+      POSTGRES_PASSWORD: secret
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U bookuser -d bookdb"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres_data:
+  static_files:
+\`\`\`
+
+\`\`\`bash
+# Khởi động
+docker-compose up -d
+
+# Apply migrations
+docker-compose exec api alembic upgrade head
+
+# Xem logs
+docker-compose logs -f api
+
+# Restart service
+docker-compose restart api
+
+# Dừng
+docker-compose down
+\`\`\`
+
+---
+
+## CORS Configuration
+
+\`\`\`python
+# app/main.py
+from fastapi.middleware.cors import CORSMiddleware
+
+# Tương đương config/cors.php trong Laravel
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://localhost:3000",      # React/Next.js dev
+        "https://yourfrontend.com",   # Production frontend
+    ],
+    allow_credentials=True,
+    allow_methods=["GET", "POST", "PATCH", "PUT", "DELETE", "OPTIONS"],
+    allow_headers=["*"],
+)
+\`\`\`
+
+---
+
+## GitHub Actions — CI/CD Pipeline
+
+\`\`\`yaml
+# .github/workflows/deploy.yml
+name: Deploy API
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run tests
+        run: pytest --cov=app --cov-fail-under=80
+
+      - name: Check code style
+        run: |
+          pip install ruff mypy
+          ruff check app/
+          mypy app/
+
+  deploy:
+    needs: test   # Chỉ deploy khi tests pass
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to server
+        # SSH vào server và pull image mới
+        run: echo "Deploy logic here"
+\`\`\`
+
+---
+
+## Production Checklist
+
+\`\`\`bash
+# ✅ 1. Environment variables
+# DATABASE_URL trỏ đến PostgreSQL production
+# DEBUG=False
+# SECRET_KEY là chuỗi random dài (dùng: openssl rand -hex 32)
+
+# ✅ 2. Database migrations
+alembic upgrade head
+
+# ✅ 3. Tests pass
+pytest --tb=short
+
+# ✅ 4. Coverage đạt 80%
+pytest --cov=app --cov-fail-under=80
+
+# ✅ 5. Code style
+ruff check app/
+mypy app/ --ignore-missing-imports
+
+# ✅ 6. Security check
+pip install bandit
+bandit -r app/ -ll  # Chỉ báo HIGH và MEDIUM severity
+
+# ✅ 7. Khởi động production
+uvicorn app.main:app \\
+  --host 0.0.0.0 \\
+  --port 8000 \\
+  --workers 4 \\
+  --log-level info \\
+  --access-log
+\`\`\`
+
+---
+
+## So sánh Deploy Stack
+
+| | Laravel | FastAPI |
+|---|---|---|
+| **Runtime** | PHP-FPM | uvicorn workers |
+| **Web server** | nginx + PHP-FPM | nginx + uvicorn (hoặc chỉ uvicorn) |
+| **Process manager** | Supervisor | systemd hoặc Docker |
+| **Queue** | Laravel Horizon | Celery |
+| **Scheduler** | \`php artisan schedule:run\` | APScheduler hoặc Celery Beat |
+| **Cache** | Redis via Laravel Cache | Redis trực tiếp |
+| **Search** | Elasticsearch | Elasticsearch |
+
+---
+
+## Tổng kết — Toàn bộ những gì đã học
+
+\`\`\`
+Bài 1:  FastAPI vs Laravel — triết lý, performance, ORM pattern
+Bài 2:  Project Structure — models, schemas, endpoints, 3 layers
+Bài 3:  Routing — main.py, include_router, Swagger UI miễn phí
+Bài 4:  Config — pydantic-settings, .env, validate kiểu dữ liệu
+Bài 5:  Database — SQLAlchemy, Data Mapper, Unit of Work
+Bài 6:  Models — Columns, ForeignKeys, Relationships, Eager Loading
+Bài 7:  Migrations — Alembic autogenerate, upgrade, downgrade
+Bài 8:  Pydantic Schemas — 4 schema pattern, from_attributes
+Bài 9:  Repository Pattern — Generic BaseRepo, tách data access
+Bài 10: Service Layer — 3 tầng rõ ràng, SOLID principles
+Bài 11: Full CRUD — apply toàn bộ, PATCH vs PUT, pagination
+Bài 12: Testing — pytest, fixtures, transaction rollback
+Bài 13: Error Handling — consistent format, custom exceptions
+Bài 14: Deploy — PostgreSQL, Docker, CI/CD, checklist
+\`\`\`
+
+**Tiếp theo khi đã thành thạo:**
+
+\`\`\`
+→ JWT Authentication — bảo vệ endpoints
+→ Redis Caching — tăng performance
+→ Background Tasks — gửi email, xử lý ảnh
+→ WebSocket — real-time notifications
+→ Rate Limiting — chống spam API
+→ API Versioning — /api/v1/, /api/v2/
+→ Async Tasks với Celery — queue jobs
+→ Full-text Search với Elasticsearch
+\`\`\`
+
+**Chúc mừng! Bạn đã hoàn thành FastAPI Book Management từ zero đến production! 🎉**
 `}];function XD(){let{user:e}=yl(),{progress:t}=vl(e?.id,`fastapi`),n=Object.values(t).filter(e=>e.completed).length,r=YD.reduce((e,t)=>e+t.readTime,0);return(0,N.jsxs)(`div`,{className:`min-h-screen px-6 py-12 max-w-4xl mx-auto`,children:[(0,N.jsxs)(`div`,{className:`mb-10`,children:[(0,N.jsxs)(`div`,{className:`inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-orange-500/10 border border-orange-500/20 text-orange-400 text-xs mb-4`,children:[(0,N.jsx)(mr,{size:12}),` Backend Track`]}),(0,N.jsx)(`h1`,{className:`text-4xl font-bold mb-2`,children:`⚡ FastAPI Mastery`}),(0,N.jsx)(`p`,{className:`text-[var(--muted)]`,children:`Build REST API thực tế — Quản lý sách từ zero đến deploy`})]}),(0,N.jsx)(`div`,{className:`grid grid-cols-2 md:grid-cols-4 gap-4 mb-10`,children:[{icon:ar,label:`Bài học`,value:`${n}/${YD.length}`,color:`text-orange-400`},{icon:pr,label:`Tổng thời gian`,value:`${r}m`,color:`text-blue-400`},{icon:Pr,label:`Hoàn thành`,value:`${Math.round(n/YD.length*100)}%`,color:`text-green-400`},{icon:Lr,label:`Dự án`,value:`Book API`,color:`text-purple-400`}].map(({icon:e,label:t,value:n,color:r})=>(0,N.jsxs)(`div`,{className:`p-4 rounded-xl bg-[var(--surface)] border border-[var(--border)] text-center`,children:[(0,N.jsx)(e,{size:20,className:`${r} mx-auto mb-2`}),(0,N.jsx)(`div`,{className:`text-xl font-bold`,children:n}),(0,N.jsx)(`div`,{className:`text-[var(--muted)] text-xs mt-1`,children:t})]},t))}),(0,N.jsxs)(`div`,{className:`p-5 rounded-2xl bg-orange-900/10 border border-orange-800/30 mb-8`,children:[(0,N.jsx)(`h2`,{className:`font-semibold mb-2 flex items-center gap-2`,children:`📚 Dự án: Book Management API`}),(0,N.jsx)(`p`,{className:`text-sm text-[var(--muted)] mb-3`,children:`Build API quản lý sách với đầy đủ tính năng từ PDF tutorial`}),(0,N.jsx)(`div`,{className:`flex flex-wrap gap-2 text-xs`,children:[`FastAPI`,`SQLAlchemy`,`Alembic`,`Pydantic`,`SQLite→PostgreSQL`,`File Upload`,`pytest`].map(e=>(0,N.jsx)(`span`,{className:`px-2.5 py-1 rounded-full bg-orange-900/30 text-orange-300 border border-orange-800/30`,children:e},e))})]}),(0,N.jsx)(`div`,{className:`space-y-3`,children:YD.map((e,n)=>{let r=t[e.id]?.completed,i=!(n===0||t[YD[n-1].id]?.completed)&&n>0;return(0,N.jsxs)(jn,{to:i?`#`:`/fastapi/${e.id}`,className:`flex items-start gap-4 p-5 rounded-2xl border transition-all group ${r?`bg-green-900/10 border-green-800/30 hover:border-green-600/50`:i?`opacity-40 cursor-not-allowed bg-[var(--surface)] border-[var(--border)]`:`bg-[var(--surface)] border-[var(--border)] hover:border-orange-600/50 hover:bg-orange-900/5`}`,children:[(0,N.jsx)(`div`,{className:`w-9 h-9 rounded-xl shrink-0 flex items-center justify-center text-sm font-bold ${r?`bg-green-500/20 text-green-400`:`bg-orange-500/10 text-orange-400`}`,children:r?(0,N.jsx)(dr,{size:18}):String(e.unit).padStart(2,`0`)}),(0,N.jsxs)(`div`,{className:`flex-1 min-w-0`,children:[(0,N.jsxs)(`div`,{className:`flex items-start justify-between gap-2`,children:[(0,N.jsx)(`h3`,{className:`font-semibold text-sm group-hover:text-orange-300 transition-colors `,children:e.title}),(0,N.jsxs)(`div`,{className:`flex items-center gap-1 text-xs text-[var(--muted)] shrink-0`,children:[(0,N.jsx)(pr,{size:11}),` `,e.readTime,`m`]})]}),(0,N.jsx)(`p`,{className:`text-xs text-[var(--muted)] mt-0.5 line-clamp-1`,children:e.subtitle}),(0,N.jsx)(`div`,{className:`flex items-center gap-2 mt-2`,children:(0,N.jsxs)(`span`,{className:`text-xs text-orange-400/70 italic line-clamp-1`,children:[`💡 `,e.keyTakeaway]})}),(0,N.jsx)(`div`,{className:`flex flex-wrap gap-1 mt-2`,children:e.tags.slice(0,4).map(e=>(0,N.jsx)(`span`,{className:`text-xs px-1.5 py-0.5 rounded bg-white/5 text-[var(--muted)]`,children:e},e))})]})]},e.id)})})]})}function ZD(){let{id:e}=mt(),t=YD.find(t=>t.id===e),n=YD.findIndex(t=>t.id===e),r=YD[n-1],i=YD[n+1],{user:a}=yl(),{progress:o,saveProgress:s}=vl(a?.id,`fastapi`),[c,l]=(0,v.useState)(o[e||``]?.notes||``),[u,d]=(0,v.useState)(`read`),[f,p]=(0,v.useState)(!1);if(!t)return(0,N.jsx)(`div`,{className:`p-8 text-center text-[var(--muted)]`,children:`Lesson not found`});let m=o[t.id]?.completed,h=Object.values(o).filter(e=>e.completed).length;return(0,N.jsxs)(`div`,{className:`min-h-screen bg-[var(--bg)]`,children:[(0,N.jsx)(`div`,{className:`fixed top-14 left-0 right-0 z-40 h-0.5 bg-[var(--border)]`,children:(0,N.jsx)(`div`,{className:`h-full bg-gradient-to-r from-orange-500 to-amber-400 transition-all duration-500`,style:{width:`${(n+1)/YD.length*100}%`}})}),(0,N.jsxs)(`div`,{className:`max-w-3xl mx-auto px-6 py-10`,children:[(0,N.jsxs)(`div`,{className:`flex items-center gap-2 text-xs text-[var(--muted)] mb-8`,children:[(0,N.jsxs)(jn,{to:`/fastapi`,className:`hover:text-white transition-colors flex items-center gap-1`,children:[(0,N.jsx)(mr,{size:12}),` FastAPI`]}),(0,N.jsx)(`span`,{children:`/`}),(0,N.jsxs)(`span`,{className:`text-white/60`,children:[`Bài `,t.unit]})]}),(0,N.jsxs)(`div`,{className:`mb-8`,children:[(0,N.jsxs)(`div`,{className:`flex flex-wrap items-center gap-3 mb-5`,children:[(0,N.jsxs)(`span`,{className:`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold bg-orange-500/15 border border-orange-500/30 text-orange-400`,children:[`Bài `,String(t.unit).padStart(2,`0`),` / `,YD.length]}),(0,N.jsxs)(`span`,{className:`flex items-center gap-1.5 text-xs text-[var(--muted)]`,children:[(0,N.jsx)(pr,{size:12}),` `,t.readTime,` phút đọc`]}),m&&(0,N.jsxs)(`span`,{className:`flex items-center gap-1.5 text-xs text-green-400`,children:[(0,N.jsx)(dr,{size:12}),` Đã hoàn thành`]}),(0,N.jsxs)(`span`,{className:`flex items-center gap-1.5 text-xs text-[var(--muted)] ml-auto`,children:[(0,N.jsx)(ar,{size:12}),` `,h,`/`,YD.length,` bài xong`]})]}),(0,N.jsx)(`h1`,{className:`text-3xl md:text-4xl font-bold mb-3 leading-tight`,children:t.title}),(0,N.jsx)(`p`,{className:`text-[var(--muted)] text-lg`,children:t.subtitle}),(0,N.jsx)(`div`,{className:`flex flex-wrap gap-2 mt-4`,children:t.tags.map(e=>(0,N.jsxs)(`span`,{className:`text-xs px-2.5 py-1 rounded-full border border-[var(--border)] text-[var(--muted)] hover:border-orange-600/40 transition-colors`,children:[`#`,e]},e))})]}),(0,N.jsxs)(`div`,{className:`relative p-5 rounded-2xl bg-gradient-to-br from-orange-500/10 to-amber-500/5 border border-orange-500/25 mb-8 overflow-hidden`,children:[(0,N.jsx)(`div`,{className:`absolute top-0 right-0 w-32 h-32 bg-orange-500/5 rounded-full -translate-y-1/2 translate-x-1/2`}),(0,N.jsxs)(`div`,{className:`relative flex gap-4`,children:[(0,N.jsx)(`div`,{className:`text-3xl shrink-0`,children:`💡`}),(0,N.jsxs)(`div`,{children:[(0,N.jsx)(`div`,{className:`text-xs font-bold text-orange-400 uppercase tracking-widest mb-2`,children:`Key Takeaway`}),(0,N.jsx)(`p`,{className:`text-sm text-orange-100/80 leading-relaxed font-medium`,children:t.keyTakeaway})]})]})]}),(0,N.jsx)(`div`,{className:`flex gap-1 p-1 bg-[var(--surface)] rounded-2xl border border-[var(--border)] w-fit mb-8`,children:[`read`,`notes`].map(e=>(0,N.jsx)(`button`,{onClick:()=>d(e),className:`px-5 py-2.5 rounded-xl text-sm font-medium transition-all ${u===e?`bg-orange-600 text-white shadow-lg shadow-orange-500/20`:`text-[var(--muted)] hover:text-white hover:bg-white/5`}`,children:e===`read`?`📖 Đọc bài`:`📝 Ghi chú`},e))}),u===`read`&&(0,N.jsxs)(N.Fragment,{children:[(0,N.jsx)(`div`,{className:`bg-[var(--surface)] rounded-2xl border border-[var(--border)] p-6 md:p-8 mb-8`,children:(0,N.jsx)(RD,{content:t.content,accentColor:`orange`})}),m?(0,N.jsxs)(`div`,{className:`flex items-center justify-center gap-3 py-4`,children:[(0,N.jsxs)(`span`,{className:`flex items-center gap-2 text-green-400 font-medium`,children:[(0,N.jsx)(dr,{size:18}),` Bài này đã hoàn thành!`]}),f&&(0,N.jsx)(`span`,{className:`text-xs text-[var(--muted)]`,children:`✓ Saved`})]}):(0,N.jsx)(`div`,{className:`sticky bottom-6 flex justify-center`,children:(0,N.jsxs)(`button`,{onClick:async()=>{await s(t.id,{completed:!0,score:100,notes:c}),p(!0),setTimeout(()=>p(!1),2500)},className:`flex items-center gap-2.5 px-8 py-3.5 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-500 hover:to-emerald-500 rounded-2xl font-semibold text-sm shadow-2xl shadow-green-500/30 transition-all hover:scale-105 hover:shadow-green-500/40`,children:[(0,N.jsx)(dr,{size:18}),` Đọc xong — Next bài!`]})})]}),u===`notes`&&(0,N.jsxs)(`div`,{children:[(0,N.jsxs)(`div`,{className:`bg-[var(--surface)] rounded-2xl border border-[var(--border)] overflow-hidden mb-4`,children:[(0,N.jsxs)(`div`,{className:`px-5 py-3.5 border-b border-[var(--border)] flex items-center justify-between bg-white/3`,children:[(0,N.jsxs)(`span`,{className:`text-sm font-medium`,children:[`📝 Ghi chú — Bài `,t.unit,`: `,t.title]}),(0,N.jsx)(`span`,{className:`text-xs text-[var(--muted)] bg-white/5 px-2 py-0.5 rounded`,children:`Markdown`})]}),(0,N.jsx)(`textarea`,{value:c,onChange:e=>l(e.target.value),placeholder:`# Ghi chú bài ${t.unit}\n\n## Điều cần nhớ\n- \n\n## Code mình đã thử\n\`\`\`python\n\n\`\`\`\n\n## Câu hỏi / Chưa hiểu\n- \n\n## Apply vào project thật như nào?`,className:`w-full h-96 p-5 bg-transparent text-sm text-[var(--text)] resize-none focus:outline-none font-mono placeholder-[var(--muted)]/40 leading-relaxed`})]}),(0,N.jsxs)(`button`,{onClick:async()=>{await s(t.id,{notes:c,completed:m,score:m?100:0}),p(!0),setTimeout(()=>p(!1),2e3)},className:`flex items-center gap-2 px-6 py-2.5 bg-orange-600 hover:bg-orange-500 rounded-xl text-sm font-medium transition-all hover:shadow-lg hover:shadow-orange-500/20`,children:[(0,N.jsx)(jr,{size:14}),` `,f?`✓ Đã lưu!`:`Lưu ghi chú`]})]}),(0,N.jsxs)(`div`,{className:`flex items-stretch justify-between gap-4 mt-12 pt-8 border-t border-[var(--border)]`,children:[r?(0,N.jsxs)(jn,{to:`/fastapi/${r.id}`,className:`flex-1 flex items-start gap-3 p-4 rounded-2xl border border-[var(--border)] hover:border-orange-600/40 hover:bg-orange-900/5 transition-all group max-w-[48%]`,children:[(0,N.jsx)(cr,{size:18,className:`text-[var(--muted)] group-hover:text-orange-400 transition-colors mt-0.5 shrink-0`}),(0,N.jsxs)(`div`,{children:[(0,N.jsx)(`div`,{className:`text-xs text-[var(--muted)] mb-1`,children:`Bài trước`}),(0,N.jsx)(`div`,{className:`text-sm font-medium group-hover:text-orange-300 transition-colors line-clamp-2 leading-snug`,children:r.title})]})]}):(0,N.jsx)(`div`,{}),i?(0,N.jsxs)(jn,{to:`/fastapi/${i.id}`,className:`flex-1 flex items-start justify-end gap-3 p-4 rounded-2xl border border-[var(--border)] hover:border-orange-600/40 hover:bg-orange-900/5 transition-all group text-right max-w-[48%]`,children:[(0,N.jsxs)(`div`,{children:[(0,N.jsx)(`div`,{className:`text-xs text-[var(--muted)] mb-1`,children:`Bài tiếp`}),(0,N.jsx)(`div`,{className:`text-sm font-medium group-hover:text-orange-300 transition-colors line-clamp-2 leading-snug`,children:i.title})]}),(0,N.jsx)(lr,{size:18,className:`text-[var(--muted)] group-hover:text-orange-400 transition-colors mt-0.5 shrink-0`})]}):(0,N.jsx)(`div`,{})]})]})]})}function QD(){let e=lt(),{user:t,signOut:n}=yl(),r=t=>e.pathname===t||e.pathname.startsWith(t+`/`);return(0,N.jsx)(`nav`,{className:`fixed top-0 left-0 right-0 z-50 border-b border-[var(--border)] bg-[var(--bg)]/90 backdrop-blur-sm`,children:(0,N.jsxs)(`div`,{className:`max-w-6xl mx-auto px-4 h-14 flex items-center justify-between gap-2`,children:[(0,N.jsx)(jn,{to:`/`,className:`font-bold text-sm hover:text-indigo-400 transition-colors shrink-0`,children:`VQ.`}),(0,N.jsxs)(`div`,{className:`flex items-center gap-4 overflow-x-auto text-sm`,children:[(0,N.jsxs)(jn,{to:`/`,className:`flex items-center gap-1.5 transition-colors shrink-0 ${e.pathname===`/`?`text-white`:`text-[var(--muted)] hover:text-white`}`,children:[(0,N.jsx)(Fr,{size:13}),` `,(0,N.jsx)(`span`,{className:`hidden sm:inline`,children:`Portfolio`})]}),(0,N.jsxs)(jn,{to:`/python-25`,className:`flex items-center gap-1.5 transition-colors shrink-0 ${r(`/python-25`)?`text-indigo-400`:`text-[var(--muted)] hover:text-white`}`,children:[(0,N.jsx)(mr,{size:13}),` Python`]}),(0,N.jsxs)(jn,{to:`/fastapi`,className:`flex items-center gap-1.5 transition-colors shrink-0 ${r(`/fastapi`)?`text-orange-400`:`text-[var(--muted)] hover:text-white`}`,children:[(0,N.jsx)(Lr,{size:13}),` FastAPI`]}),(0,N.jsxs)(jn,{to:`/claude-mastery`,className:`flex items-center gap-1.5 transition-colors shrink-0 ${r(`/claude-mastery`)?`text-purple-400`:`text-[var(--muted)] hover:text-white`}`,children:[(0,N.jsx)(or,{size:13}),` Claude`]}),(0,N.jsxs)(jn,{to:`/english-interview`,className:`flex items-center gap-1.5 transition-colors shrink-0 ${r(`/english-interview`)?`text-green-400`:`text-[var(--muted)] hover:text-white`}`,children:[(0,N.jsx)(br,{size:13}),` English`]}),t?(0,N.jsx)(`button`,{onClick:n,className:`text-[var(--muted)] hover:text-white flex items-center gap-1.5 transition-colors shrink-0`,children:(0,N.jsx)(wr,{size:13})}):(0,N.jsx)(jn,{to:`/python-25/login`,className:`text-[var(--muted)] hover:text-white flex items-center gap-1.5 transition-colors shrink-0`,children:(0,N.jsx)(Fr,{size:13})})]})]})})}function $D(){return(0,N.jsxs)(On,{children:[(0,N.jsx)(QD,{}),(0,N.jsx)(`div`,{className:`pt-14`,children:(0,N.jsxs)(Bt,{children:[(0,N.jsx)(Rt,{path:`/`,element:(0,N.jsx)(Hr,{})}),(0,N.jsx)(Rt,{path:`/python-25`,element:(0,N.jsx)(bl,{})}),(0,N.jsx)(Rt,{path:`/python-25/:day`,element:(0,N.jsx)(D_,{})}),(0,N.jsx)(Rt,{path:`/python-25/login`,element:(0,N.jsx)(O_,{})}),(0,N.jsx)(Rt,{path:`/fastapi`,element:(0,N.jsx)(XD,{})}),(0,N.jsx)(Rt,{path:`/fastapi/:id`,element:(0,N.jsx)(ZD,{})}),(0,N.jsx)(Rt,{path:`/claude-mastery`,element:(0,N.jsx)(j_,{})}),(0,N.jsx)(Rt,{path:`/claude-mastery/:id`,element:(0,N.jsx)(zD,{})}),(0,N.jsx)(Rt,{path:`/english-interview`,element:(0,N.jsx)(UD,{})}),(0,N.jsx)(Rt,{path:`/english-interview/:id`,element:(0,N.jsx)(JD,{})})]})})]})}(0,y.createRoot)(document.getElementById(`root`)).render((0,N.jsx)(v.StrictMode,{children:(0,N.jsx)($D,{})}));
