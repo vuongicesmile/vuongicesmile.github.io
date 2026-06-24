@@ -1,46 +1,66 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabase'
 
-export type DayProgress = {
-  day: number; score: number; completed: boolean; notes: string; updated_at: string
+export type ItemProgress = {
+  id: string; score: number; completed: boolean; notes: string; updated_at: string
 }
 
-const STORAGE_KEY = 'py25_progress'
+type Track = 'python' | 'claude' | 'english' | 'fastapi' | 'realworld' | 'book-management'
 
-function localGet(): Record<number, DayProgress> {
-  try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}') } catch { return {} }
-}
-function localSet(data: Record<number, DayProgress>) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(data))
+function storageKey(track: Track) {
+  return track === 'python' ? 'py25_progress' : 'claude_progress'
 }
 
-export function useProgress(userId?: string) {
-  const [progress, setProgress] = useState<Record<number, DayProgress>>(localGet)
+function localGet(track: Track): Record<string, ItemProgress> {
+  try { return JSON.parse(localStorage.getItem(storageKey(track)) || '{}') } catch { return {} }
+}
+
+function localSet(track: Track, data: Record<string, ItemProgress>) {
+  localStorage.setItem(storageKey(track), JSON.stringify(data))
+}
+
+export function useProgress(userId?: string, track: Track = 'python') {
+  const [progress, setProgress] = useState<Record<string, ItemProgress>>(() => localGet(track))
   const [loading, setLoading] = useState(false)
+
+  useEffect(() => {
+    setProgress(localGet(track))
+  }, [track])
 
   useEffect(() => {
     if (!userId) return
     setLoading(true)
-    supabase.from('progress').select('*').eq('user_id', userId)
+    supabase.from('progress')
+      .select('*')
+      .eq('user_id', userId)
+      .eq('track', track)
       .then(({ data }) => {
         if (data) {
-          const map = Object.fromEntries(data.map(r => [r.day, r]))
+          const map = Object.fromEntries(data.map(r => [r.item_id, r]))
           setProgress(map)
-          localSet(map)
+          localSet(track, map)
         }
         setLoading(false)
       })
-  }, [userId])
+  }, [userId, track])
 
-  const saveProgress = async (day: number, update: Partial<DayProgress>) => {
-    const current = progress[day] || { day, score: 0, completed: false, notes: '', updated_at: '' }
-    const next = { ...current, ...update, day, updated_at: new Date().toISOString() }
-    const newProgress = { ...progress, [day]: next }
+  const saveProgress = async (itemId: string, update: Partial<ItemProgress>) => {
+    const current = progress[itemId] || { id: itemId, score: 0, completed: false, notes: '', updated_at: '' }
+    const next = { ...current, ...update, id: itemId, updated_at: new Date().toISOString() }
+    const newProgress = { ...progress, [itemId]: next }
     setProgress(newProgress)
-    localSet(newProgress)
+    localSet(track, newProgress)
 
     if (userId) {
-      await supabase.from('progress').upsert({ ...next, user_id: userId })
+      await supabase.from('progress').upsert({
+        user_id: userId,
+        item_id: itemId,
+        track,
+        score: next.score,
+        completed: next.completed,
+        notes: next.notes,
+        updated_at: next.updated_at,
+      })
     }
   }
 

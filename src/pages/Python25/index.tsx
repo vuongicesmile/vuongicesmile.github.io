@@ -6,7 +6,7 @@ import { useAuth } from '../../hooks/useAuth'
 
 export default function Python25Dashboard() {
   const { user } = useAuth()
-  const { progress, totalScore, completedDays } = useProgress(user?.id)
+  const { progress, totalScore, completedDays } = useProgress(user?.id, 'python')
 
   const streak = completedDays // simplified streak
 
