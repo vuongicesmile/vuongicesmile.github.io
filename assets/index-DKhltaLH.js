@@ -8359,9 +8359,88 @@ Route::apiResource('books', BookController::class);
 
 ---
 
-## Dependency Injection — \`Depends()\`
+## Setup: app/db/session.py
 
-\`Depends()\` là cơ chế DI của FastAPI. Ví dụ phổ biến nhất: inject DB session:
+Trước khi dùng \`Depends(get_db)\`, bạn phải tạo \`SessionLocal\` trong \`app/db/session.py\`:
+
+\`\`\`python
+# app/db/session.py
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker, DeclarativeBase
+from app.core.config import get_settings
+
+settings = get_settings()
+
+engine = create_engine(
+    settings.database_url,
+    pool_pre_ping=True,  # kiểm tra kết nối còn sống không trước mỗi query
+)
+
+# SessionLocal là "factory" — mỗi lần gọi SessionLocal() tạo ra 1 session mới
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+
+# Base class cho tất cả models SQLAlchemy
+class Base(DeclarativeBase):
+    pass
+\`\`\`
+
+| Biến | Vai trò |
+|---|---|
+| \`engine\` | Kết nối thật đến PostgreSQL (dùng connection pool) |
+| \`SessionLocal\` | Factory tạo DB session — mỗi request nhận 1 session riêng |
+| \`Base\` | Class cha cho tất cả models (Book, Author...) |
+
+> ⚠️ **Lỗi thường gặp:** \`ImportError: cannot import name 'SessionLocal'\` → bạn chưa tạo file này, hoặc chưa khai báo \`SessionLocal = sessionmaker(...)\`.
+
+---
+
+## Dependency Injection — lý thuyết
+
+**Dependency Injection (DI)** là pattern: thay vì hàm tự tạo dependency (DB connection, service...), nó **nhận** dependency từ bên ngoài truyền vào.
+
+### Không có DI (BAD):
+
+\`\`\`python
+# BAD: handler tự tạo DB session — không test được, dễ leak connection
+@router.get("/books")
+async def list_books():
+    db = SessionLocal()  # ← tự tạo — ai close? Nếu exception xảy ra thì sao?
+    books = db.query(Book).all()
+    db.close()           # ← nếu exception trước dòng này → connection leak!
+    return books
+\`\`\`
+
+Vấn đề:
+- Nếu exception xảy ra trước \`db.close()\` → **connection leak**
+- Không thể inject mock DB khi unit test
+- Mỗi handler phải tự quản lý vòng đời session
+
+### Có DI (GOOD):
+
+\`\`\`python
+# GOOD: framework inject session đã được quản lý sẵn
+@router.get("/books")
+async def list_books(db: Session = Depends(get_db)):
+    return db.query(Book).all()
+    # FastAPI tự close db sau khi handler xong, dù có exception hay không
+\`\`\`
+
+### So với các framework khác:
+
+| Framework | Cách DI |
+|---|---|
+| **FastAPI** | \`Depends(factory_fn)\` — khai báo ngay trong tham số hàm |
+| **Laravel** | \`BookController(BookRepository $repo)\` — constructor injection qua IoC Container |
+| **Express.js** | Không có DI built-in — thường dùng \`req.db\` hoặc thư viện \`awilix\` |
+| **NestJS** | \`@Injectable()\` + \`@Module()\` — giống Laravel nhất |
+
+FastAPI DI **đơn giản hơn** vì không cần container hay decorators — chỉ cần khai báo hàm dependency rồi dùng \`Depends()\`.
+
+---
+
+## Depends() — inject DB session vào handler
+
+Sau khi có \`SessionLocal\`, tạo \`app/api/deps.py\`:
 
 \`\`\`python
 # app/api/deps.py
@@ -8379,23 +8458,23 @@ def get_db():
 # Dùng trong endpoint
 @router.get("/{book_id}")
 async def get_book(
-    book_id: int,              # path parameter
-    db: Session = Depends(get_db),  # injected dependency
+    book_id: int,                    # path parameter — từ URL
+    db: Session = Depends(get_db),   # FastAPI inject session tự động
 ):
     ...
 \`\`\`
 
 FastAPI tự động:
 1. Gọi \`get_db()\` trước khi chạy handler
-2. Inject kết quả vào tham số \`db\`
-3. Sau khi handler xong, tiếp tục generator (chạy \`finally: db.close()\`)
+2. Inject kết quả \`db\` vào tham số
+3. Sau khi handler xong → tiếp tục generator → chạy \`finally: db.close()\`
 
-So với Laravel Dependency Injection:
 \`\`\`php
-// Laravel — inject qua constructor hoặc method
-public function index(BookRepository $repo) {
-    return $repo->all();
+// Laravel tương đương — inject qua method signature
+public function show(BookRepository $repo, int $id) {
+    return $repo->find($id);
 }
+// Laravel IoC container tự tạo BookRepository và inject vào
 \`\`\`
 
 ---
