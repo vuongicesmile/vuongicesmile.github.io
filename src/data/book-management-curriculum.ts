@@ -249,6 +249,73 @@ Route::apiResource('books', BookController::class);
 
 ---
 
+## Setup: app/core/config.py — pydantic-settings
+
+\`app/db/session.py\` dùng \`get_settings()\` để lấy \`database_url\`. Đây là nơi khai báo tất cả config từ \`.env\`:
+
+\`\`\`python
+# app/core/config.py
+from __future__ import annotations
+from functools import lru_cache
+from pydantic_settings import BaseSettings, SettingsConfigDict
+
+class Settings(BaseSettings):
+    model_config = SettingsConfigDict(env_file=".env", extra="ignore")
+
+    # App
+    project_name: str = "Book Management API"
+    env: str = "development"
+
+    # Database
+    database_url: str = "sqlite:///./app.db"
+
+    # OpenAI
+    openai_api_key: str = ""
+    openai_chat_model: str = "gpt-4o-mini"
+
+    # Redis
+    redis_url: str = "redis://localhost:6379/0"
+
+@lru_cache
+def get_settings() -> Settings:
+    return Settings()
+\`\`\`
+
+\`\`\`ini
+# .env (không commit file này — chỉ commit .env.example)
+DATABASE_URL=postgresql+asyncpg://user:pass@localhost:5432/bookdb
+OPENAI_API_KEY=sk-...
+REDIS_URL=redis://localhost:6379/0
+\`\`\`
+
+**Tại sao dùng \`pydantic-settings\` thay vì \`os.environ\`?**
+
+| | \`os.environ.get()\` | \`pydantic-settings\` |
+|---|---|---|
+| Type safety | ❌ luôn là \`str\` | ✅ auto convert sang \`int\`, \`bool\`... |
+| Default values | Phải viết thủ công | Khai báo ngay trong class |
+| .env file loading | Phải dùng \`python-dotenv\` riêng | Built-in |
+| Validation | Không có | Pydantic validate khi khởi động |
+| Lỗi thiếu key | Runtime crash muộn | Fail-fast ngay khi start |
+
+**Tại sao \`@lru_cache\`?**
+
+\`\`\`python
+# Không có @lru_cache — đọc lại .env file mỗi lần gọi
+settings1 = Settings()  # đọc .env
+settings2 = Settings()  # đọc .env lần nữa — lãng phí
+settings1 is settings2  # False — 2 object khác nhau
+
+# Có @lru_cache — đọc 1 lần duy nhất
+settings1 = get_settings()
+settings2 = get_settings()
+settings1 is settings2  # True — cùng 1 object (singleton)
+\`\`\`
+
+> 💡 **Pattern từ production:** Luôn dùng \`get_settings()\` thay vì \`Settings()\` trực tiếp, và never dùng \`os.environ\` trong business logic.
+
+---
+
 ## Setup: app/db/session.py
 
 Trước khi dùng \`Depends(get_db)\`, bạn phải tạo \`SessionLocal\` trong \`app/db/session.py\`:
